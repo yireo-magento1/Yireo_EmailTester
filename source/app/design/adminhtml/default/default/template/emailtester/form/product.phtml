@@ -1,0 +1,30 @@
+<?php
+/**
+ * Yireo EmailTester for Magento 
+ *
+ * @package     Yireo_EmailTester
+ * @author      Yireo (http://www.yireo.com/)
+ * @copyright   Copyright (c) 2013 Yireo (http://www.yireo.com/)
+ * @license     Open Source License
+ */
+?>
+<div class="fieldset">
+<table cellspacing="0" class="form-list" style="width:100%">
+    <tbody>
+        <tr class="headings">
+            <td class="label"><label for="product_id"><?php echo Mage::helper('emailtester')->__('Product')?></label>
+            </td>
+            <td>
+                <select name="product_id" id="product_id">
+                    <?php foreach($this->getProductOptions() as $option) : ?>
+                    <?php $selected = ($option['current']) ? 'selected="selected"' : null; ?>
+                    <option value="<?php echo $option['value']; ?>" <?php echo $selected; ?>><?php echo $option['label']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <!--<input type="input" name="product_id" id="product_id" value="<?php echo $this->getProductId(); ?>" disabled="disabled" />-->
+                <?php //echo $this->getChildHtml('productsGrid') ?>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Yireo EmailTester for Magento 
+ *
+ * @package     Yireo_EmailTester
+ * @author      Yireo (http://www.yireo.com/)
+ * @copyright   Copyright (C) 2014 Yireo (http://www.yireo.com/)
+ * @license     Open Source License (OSL v3)
+ */
+-->
+<config>
+
+    <modules>
+        <Yireo_EmailTester>
+            <version>0.0.13</version>
+        </Yireo_EmailTester>
+    </modules>
+
+    <global>
+        <blocks>
+            <emailtester>
+                <class>Yireo_EmailTester_Block</class>
+            </emailtester>
+        </blocks>
+
+        <helpers>
+            <emailtester>
+                <class>Yireo_EmailTester_Helper</class>
+            </emailtester>
+        </helpers>
+
+        <models>
+            <emailtester>
+                <class>Yireo_EmailTester_Model</class>
+            </emailtester>
+        </models>
+    </global>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <emailtester before="Mage_Adminhtml">Yireo_EmailTester</emailtester>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+    <default>
+        <emailtester>
+            <settings>
+                <limit_product>20</limit_product>
+                <limit_customer>20</limit_customer>
+                <limit_order>20</limit_order>
+            </settings>
+        </emailtester>
+    </default>
+</config>

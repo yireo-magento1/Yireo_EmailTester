@@ -1,0 +1,29 @@
+<?php
+/**
+ * Yireo EmailTester for Magento 
+ *
+ * @package     Yireo_EmailTester
+ * @author      Yireo (http://www.yireo.com/)
+ * @copyright   Copyright (c) 2013 Yireo (http://www.yireo.com/)
+ * @license     Open Source License
+ */
+
+?>
+<div class="fieldset">
+<table cellspacing="0" class="form-list">
+    <tbody>
+        <tr class="headings">
+            <td class="label"><label for="order_id"><?php echo Mage::helper('emailtester')->__('Order')?></label>
+            </td>
+            <td class="value">
+                <select name="order_id" id="order_id">
+                    <?php foreach($this->getOrderOptions() as $option) : ?>
+                    <?php $selected = ($option['current']) ? 'selected="selected"' : null; ?>
+                    <option value="<?php echo $option['value']; ?>" <?php echo $selected; ?>><?php echo $option['label']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>

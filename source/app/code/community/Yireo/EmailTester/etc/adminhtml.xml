@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Yireo EmailTester for Magento 
+ *
+ * @package     Yireo_EmailTester
+ * @author      Yireo (http://www.yireo.com/)
+ * @copyright   Copyright (C) 2014 Yireo (http://www.yireo.com/)
+ * @license     Open Source License (OSL v3)
+ */
+-->
+<config>
+    <translate>
+        <modules>
+            <Yireo_EmailTester>
+                <files>
+                    <default>Yireo_EmailTester.csv</default>
+                </files>
+            </Yireo_EmailTester>
+        </modules>
+    </translate>
+
+    <menu>
+         <system>
+            <children>
+                <tools>
+                    <children>
+                        <emailtester translate="title" module="emailtester">
+                            <title>Email Tester</title>
+                            <action>adminhtml/emailtester/index</action>
+                        </emailtester>
+                    </children>
+                </tools>
+            </children>
+         </system>
+    </menu>
+
+    <layout>
+        <updates>
+            <emailtester>
+                <file>emailtester.xml</file>
+            </emailtester>
+        </updates>
+    </layout>
+
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <tools>
+                                <children>
+                                    <emailtester>
+                                        <title>Email Tester</title>
+                                    </emailtester>
+                                </children>
+                            </tools>
+                            <config>
+                                <children>
+                                    <emailtester>
+                                        <title>Yireo_EmailTester Settings</title>
+                                    </emailtester>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+
+    <events>
+        <controller_action_predispatch>
+            <observers>
+                <emailtester_controller_action_predispatch>
+                    <type>singleton</type>
+                    <class>Yireo_EmailTester_Model_Observer</class>
+                    <method>controllerActionPredispatch</method>
+                </emailtester_controller_action_predispatch>
+            </observers>
+        </controller_action_predispatch>
+    </events>
+</config>

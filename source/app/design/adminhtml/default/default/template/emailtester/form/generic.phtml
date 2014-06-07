@@ -1,0 +1,35 @@
+<?php
+/**
+ * Yireo EmailTester for Magento 
+ *
+ * @package     Yireo_EmailTester
+ * @author      Yireo (http://www.yireo.com/)
+ * @copyright   Copyright (c) 2013 Yireo (http://www.yireo.com/)
+ * @license     Open Source License
+ */
+
+?>
+<div class="fieldset">
+<table cellspacing="0" class="form-list">
+    <tbody>
+        <tr class="headings">
+            <td class="label"><label for="email"><?php echo Mage::helper('emailtester')->__('Mail To')?></label>
+            </td>
+            <td class="value">
+                <input type="text" name="email" id="email" value="<?php echo $this->getCurrentEmail(); ?>" class="input-text required-entry" />
+            </td>
+        </tr>
+        <tr class="headings">
+            <td class="label"><label for="template"><?php echo Mage::helper('emailtester')->__('Transactional Email')?></label>
+            </td>
+            <td class="value">
+                <select id="template" name="template" class="select required-entry">
+                    <?php foreach ($this->getTemplateOptions() as $_option): ?>
+                    <option value="<?php echo $_option['value'] ?>"<?php echo $this->getCurrentTemplate() == $_option['value'] ? ' selected="selected"' : '' ?>><?php echo $_option['label'] ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
