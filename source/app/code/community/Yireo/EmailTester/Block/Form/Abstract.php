@@ -5,7 +5,7 @@
  * @package     Yireo_EmailTester
  * @author      Yireo (http://www.yireo.com/)
  * @copyright   Copyright (C) 2014 Yireo (http://www.yireo.com/)
- * @license     Open Source License (OSL v3)
+ * @license     Open Source License
  */
 
 class Yireo_EmailTester_Block_Form_Abstract extends Mage_Adminhtml_Block_Widget_Container
@@ -25,5 +25,15 @@ class Yireo_EmailTester_Block_Form_Abstract extends Mage_Adminhtml_Block_Widget_
         }
 
         return $options;
+    }
+
+    public function getStoreId()
+    {
+        $storeId = Mage::getSingleton('adminhtml/session')->getData('emailtester.store');
+        if($storeId > 0) {
+            return $storeId;
+        }
+
+        return (int)$this->getRequest()->getParam('store');
     }
 }

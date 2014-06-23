@@ -5,7 +5,7 @@
  * @package     Yireo_EmailTester
  * @author      Yireo (http://www.yireo.com/)
  * @copyright   Copyright (C) 2014 Yireo (http://www.yireo.com/)
- * @license     Open Source License (OSL v3)
+ * @license     Open Source License
  */
 
 class Yireo_EmailTester_Block_Form_Customer extends Yireo_EmailTester_Block_Form_Abstract
@@ -40,7 +40,13 @@ class Yireo_EmailTester_Block_Form_Customer extends Yireo_EmailTester_Block_Form
             ->addAttributeToSelect('*')
             ->setOrder('entity_id', 'DESC')
         ;
+
         if($limit > 0) $customers->setPage(0, $limit);
+
+        $storeId = $this->getStoreId();
+        if($storeId > 0) {
+            $customers->addAttributeToFilter('store_id', $storeId);
+        }
 
         $customOptions = $this->getCustomOptions('customer');
         if(!empty($customOptions)) {

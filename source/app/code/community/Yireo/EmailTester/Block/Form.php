@@ -39,6 +39,7 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
         if($storeId > 0) {
             return $storeId;
         }
+
         return (int)$this->getRequest()->getParam('store');
     }
 

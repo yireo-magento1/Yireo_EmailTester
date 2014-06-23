@@ -5,7 +5,7 @@
  * @package     Yireo_EmailTester
  * @author      Yireo (http://www.yireo.com/)
  * @copyright   Copyright (C) 2014 Yireo (http://www.yireo.com/)
- * @license     Open Source License (OSL v3)
+ * @license     Open Source License
  */
 
 class Yireo_EmailTester_Block_Form_Order extends Yireo_EmailTester_Block_Form_Abstract
@@ -39,7 +39,13 @@ class Yireo_EmailTester_Block_Form_Order extends Yireo_EmailTester_Block_Form_Ab
         $orders = Mage::getModel('sales/order')->getCollection()
             ->setOrder('increment_id', 'DESC')
         ;
+
         if($limit > 0) $orders->setPage(0, $limit);
+
+        $storeId = $this->getStoreId();
+        if($storeId > 0) {
+            $orders->addFieldToFilter('store_id', $storeId);
+        }
 
         $customOptions = $this->getCustomOptions('order');
         if(!empty($customOptions)) {

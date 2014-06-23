@@ -5,7 +5,7 @@
  * @package     Yireo_EmailTester
  * @author      Yireo (http://www.yireo.com/)
  * @copyright   Copyright (C) 2014 Yireo (http://www.yireo.com/)
- * @license     Open Source License (OSL v3)
+ * @license     Open Source License
  * @contributor Philipp Wiegel
  */
 
