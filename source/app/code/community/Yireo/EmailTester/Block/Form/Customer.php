@@ -45,7 +45,9 @@ class Yireo_EmailTester_Block_Form_Customer extends Yireo_EmailTester_Block_Form
 
         $storeId = $this->getStoreId();
         if($storeId > 0) {
-            $customers->addAttributeToFilter('store_id', $storeId);
+            $store = Mage::getModel('core/store')->load($storeId);
+            $websiteId = $store->getWebsiteId();
+            $customers->addAttributeToFilter('website_id', $websiteId);
         }
 
         $customOptions = $this->getCustomOptions('customer');

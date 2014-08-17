@@ -44,7 +44,13 @@ class Yireo_EmailTester_Block_Form_Order extends Yireo_EmailTester_Block_Form_Ab
 
         $storeId = $this->getStoreId();
         if($storeId > 0) {
-            $orders->addFieldToFilter('store_id', $storeId);
+            $store = Mage::getModel('core/store')->load($storeId);
+            $website = $store->getWebsite();
+            $storeIds = array();
+            foreach($website->getStores() as $store) {
+                $storeIds[] = $store->getId();
+            }
+            $orders->addFieldToFilter('store_id', $storeIds);
         }
 
         $customOptions = $this->getCustomOptions('order');

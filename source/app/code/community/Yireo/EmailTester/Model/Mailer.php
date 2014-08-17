@@ -69,11 +69,30 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
             $recipientName = $senderName;
         }
 
-        $rt = $mail->sendTransactional($template, $sender, $recipientEmail, $recipientName, $variables);
 
-        $translate->setTranslateInline(true);
-        $sent = $mail->getSentSuccess();
-        if($rt == false || $sent == false){
+        $rt = false;
+        $sent = false;
+        $errors = array();
+
+        try {
+            $rt = $mail->sendTransactional($template, $sender, $recipientEmail, $recipientName, $variables);
+            $sent = $mail->getSentSuccess();
+            $translate->setTranslateInline(true);
+
+        } catch(Exception $e) {
+            $errors[] = $e->getMessage();
+        }
+
+        if($sent == false) {
+            if(Mage::getStoreConfigFlag('system/smtp/disable')) $errors[] = 'SMTP is disabled';
+            if($mail->getSenderName() == false) $errors[] = 'Sender name is missing';
+            if($mail->getSenderEmail() == false) $errors[] = 'Sender email is missing';
+            if($mail->getTemplateSubject() == false) $errors[] = 'Template subject is missing';
+        }
+
+        if($rt == false || $sent == false) {
+            if(empty($errors)) $errors[] = 'Check your Magento logs';
+            $this->setError(implode('; ', $errors));
             return false;
         }
         

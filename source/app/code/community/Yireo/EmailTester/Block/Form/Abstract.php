@@ -29,11 +29,11 @@ class Yireo_EmailTester_Block_Form_Abstract extends Mage_Adminhtml_Block_Widget_
 
     public function getStoreId()
     {
-        $storeId = Mage::getSingleton('adminhtml/session')->getData('emailtester.store');
-        if($storeId > 0) {
-            return $storeId;
+        $storeId = (int)$this->getRequest()->getParam('store');
+        if(!$storeId > 0) {
+            $storeId = Mage::getSingleton('adminhtml/session')->getData('emailtester.store');
         }
 
-        return (int)$this->getRequest()->getParam('store');
+        return $storeId;
     }
 }
