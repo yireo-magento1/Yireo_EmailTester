@@ -69,7 +69,7 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
      */
     protected function _toHtml()
     {
-        $accordion = $this->getLayout()->createBlock('adminhtml/widget_accordion')->setId('membership');
+        $accordion = $this->getLayout()->createBlock('adminhtml/widget_accordion')->setId('emailtester');
 
         $accordion->addItem('generic', array(
             'title'   => Mage::helper('emailtester')->__('Generic'),
@@ -114,6 +114,9 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
                     'class' => 'save'
                 ))
         );
+
+        $check = $this->getLayout()->createBlock('emailtester/form_check')->setId('check');
+        $this->setChild('check', $check);
             
         $rt = parent::_toHtml();
 
