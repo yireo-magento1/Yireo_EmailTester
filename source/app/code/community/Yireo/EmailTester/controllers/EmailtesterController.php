@@ -147,6 +147,7 @@ class Yireo_EmailTester_EmailtesterController extends Mage_Adminhtml_Controller_
         $mailer->setEmail($email);
         $mailer->setStoreId($storeId);
         $mailer->setOrderId($orderId);
+        $mailer->setProductId($productId);
         $mailer->setCustomerId($customerId);
         
         // Send the mail
