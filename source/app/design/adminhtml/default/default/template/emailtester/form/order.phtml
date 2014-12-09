@@ -4,7 +4,7 @@
  *
  * @package     Yireo_EmailTester
  * @author      Yireo (http://www.yireo.com/)
- * @copyright   Copyright (c) 2013 Yireo (http://www.yireo.com/)
+ * @copyright   Copyright (c) 2014 Yireo (http://www.yireo.com/)
  * @license     Open Source License
  */
 
@@ -13,15 +13,16 @@
 <table cellspacing="0" class="form-list">
     <tbody>
         <tr class="headings">
-            <td class="label"><label for="order_id"><?php echo Mage::helper('emailtester')->__('Order')?></label>
+            <td width="100" class="label">
+                <label for="order_id"><?php echo Mage::helper('emailtester')->__('Order')?></label>
+            </td>
+            <td width="80" class="value">
+                <input name="order_id" id="order_id" class="input-text required-entry" style="width:50px;" 
+                    value="<?php echo $this->getOrderId(); ?>" placeholder="ID" />
             </td>
             <td class="value">
-                <select name="order_id" id="order_id">
-                    <?php foreach($this->getOrderOptions() as $option) : ?>
-                    <?php $selected = ($option['current']) ? 'selected="selected"' : null; ?>
-                    <option value="<?php echo $option['value']; ?>" <?php echo $selected; ?>><?php echo $option['label']; ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <input name="order_search" id="order_search" class="input-text" style="width:300px"
+                    value="<?php echo $this->getOrderSearch(); ?>" placeholder="<?php echo Mage::helper('emailtester')->__('Order search')?>" />
             </td>
         </tr>
     </tbody>

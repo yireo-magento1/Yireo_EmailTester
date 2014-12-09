@@ -22,7 +22,7 @@ class Yireo_EmailTester_Block_Form_Customer extends Yireo_EmailTester_Block_Form
         $this->setCustomer(Mage::getModel('customer/customer')->load($customerId));
     }
     
-    public function getCurrentCustomer()
+    public function getCustomerId()
     {
         $userData = Mage::getSingleton('adminhtml/session')->getData();
         $currentValue = (isset($userData['emailtester.customer_id'])) ? (int)$userData['emailtester.customer_id'] : null;
@@ -31,37 +31,13 @@ class Yireo_EmailTester_Block_Form_Customer extends Yireo_EmailTester_Block_Form
         }
         return $currentValue;
     }
-    
-    public function getCustomerOptions()
+
+    public function getCustomerSearch()
     {
-        $currentValue = $this->getCurrentCustomer();
-        $limit = Mage::getStoreConfig('emailtester/settings/limit_customer');
-        $customers = Mage::getModel('customer/customer')->getCollection()
-            ->addAttributeToSelect('*')
-            ->setOrder('entity_id', 'DESC')
-        ;
-
-        if($limit > 0) $customers->setPage(0, $limit);
-
-        $storeId = $this->getStoreId();
-        if($storeId > 0) {
-            $store = Mage::getModel('core/store')->load($storeId);
-            $websiteId = $store->getWebsiteId();
-            $customers->addAttributeToFilter('website_id', $websiteId);
+        $customerId = $this->getCustomerId(); 
+        if(!empty($customerId)) {
+            $customer = Mage::getModel('customer/customer')->load($customerId);
+            return Mage::helper('emailtester')->getCustomerOutput($customer);
         }
-
-        $customOptions = $this->getCustomOptions('customer');
-        if(!empty($customOptions)) {
-            $customers->addAttributeToFilter('entity_id', array('in' => $customOptions));
-        }
-
-        $options = array();
-        foreach($customers as $customer) {
-            $value = $customer->getId();
-            $label = '['.$customer->getId().'] '.$customer->getFirstname().' '.$customer->getLastname().' ('.$customer->getEmail().')';
-            $current = ($customer->getId() == $currentValue) ? true : false;
-            $options[] = array('value' => $value, 'label' => $label, 'current' => $current);
-        }
-        return $options;
     }
 }

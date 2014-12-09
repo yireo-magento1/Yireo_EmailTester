@@ -36,4 +36,19 @@ class Yireo_EmailTester_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::getStoreConfig('emailtester/settings/default_email');
     }
+
+    public function getCustomerOutput($customer)
+    {
+        return $customer->getName() . ' ['.$customer->getEmail().']';
+    }
+
+    public function getProductOutput($product)
+    {
+        return $product->getName() . ' ['.$product->getSku().']';
+    }
+
+    public function getOrderOutput($order)
+    {
+        return $order->getIncrementId() . ' ['.$order->getCustomerEmail().']';
+    }
 }

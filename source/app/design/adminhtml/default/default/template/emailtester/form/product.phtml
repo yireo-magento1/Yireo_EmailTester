@@ -4,7 +4,7 @@
  *
  * @package     Yireo_EmailTester
  * @author      Yireo (http://www.yireo.com/)
- * @copyright   Copyright (c) 2013 Yireo (http://www.yireo.com/)
+ * @copyright   Copyright (c) 2014 Yireo (http://www.yireo.com/)
  * @license     Open Source License
  */
 ?>
@@ -12,17 +12,16 @@
 <table cellspacing="0" class="form-list" style="width:100%">
     <tbody>
         <tr class="headings">
-            <td class="label"><label for="product_id"><?php echo Mage::helper('emailtester')->__('Product')?></label>
+            <td width="100" class="label">
+                <label for="product_id"><?php echo Mage::helper('emailtester')->__('Product')?></label>
             </td>
-            <td>
-                <select name="product_id" id="product_id">
-                    <?php foreach($this->getProductOptions() as $option) : ?>
-                    <?php $selected = ($option['current']) ? 'selected="selected"' : null; ?>
-                    <option value="<?php echo $option['value']; ?>" <?php echo $selected; ?>><?php echo $option['label']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <!--<input type="input" name="product_id" id="product_id" value="<?php echo $this->getProductId(); ?>" disabled="disabled" />-->
-                <?php //echo $this->getChildHtml('productsGrid') ?>
+            <td width="80" class="value">
+                <input name="product_id" id="product_id" class="input-text" style="width:50px;" 
+                    value="<?php echo $this->getProductId(); ?>" placeholder="ID" />
+            </td>
+            <td class="value">
+                <input name="product_search" id="product_search" class="input-text" style="width:300px;"
+                    value="<?php echo $this->getProductSearch(); ?>" placeholder="<?php echo Mage::helper('emailtester')->__('Product search')?>" />
             </td>
         </tr>
     </tbody>

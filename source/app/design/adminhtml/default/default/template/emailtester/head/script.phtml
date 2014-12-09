@@ -1,0 +1,16 @@
+<?php
+/**
+ * EmailTester extension for Magento 
+ *
+ * @package     Yireo_EmailTester
+ * @author      Yireo (http://www.yireo.com/)
+ * @copyright   Copyright (c) 2013 Yireo.com
+ * @license     Open Software License
+ */
+
+?>
+<script>
+var emailtester_customer_ajax_url = '<?php echo  Mage::helper('adminhtml')->getUrl('adminhtml/emailtester/ajax', array('type' => 'customer')); ?>';
+var emailtester_product_ajax_url = '<?php echo  Mage::helper('adminhtml')->getUrl('adminhtml/emailtester/ajax', array('type' => 'product')); ?>';
+var emailtester_order_ajax_url = '<?php echo  Mage::helper('adminhtml')->getUrl('adminhtml/emailtester/ajax', array('type' => 'order')); ?>';
+</script>

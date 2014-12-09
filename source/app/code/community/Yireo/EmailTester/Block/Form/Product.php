@@ -22,7 +22,7 @@ class Yireo_EmailTester_Block_Form_Product extends Yireo_EmailTester_Block_Form_
         $this->setProduct(Mage::getModel('catalog/product')->load($productId));
     }
 
-    public function getCurrentProduct()
+    public function getProductId()
     {
         $userData = Mage::getSingleton('adminhtml/session')->getData();
         $currentValue = (isset($userData['emailtester.product_id'])) ? (int)$userData['emailtester.product_id'] : null;
@@ -32,32 +32,15 @@ class Yireo_EmailTester_Block_Form_Product extends Yireo_EmailTester_Block_Form_
         return $currentValue;
     }
     
-    public function getProductOptions()
+    public function getProductSearch()
     {
-        $currentValue = $this->getCurrentProduct();
-        $limit = Mage::getStoreConfig('emailtester/settings/limit_product');
-        $products = Mage::getModel('catalog/product')->getCollection()
-            ->addAttributeToSelect('*')
-            ->setOrder('entity_id', 'DESC')
-        ;
-
-        if($limit > 0) $products->setPage(0, $limit);
-
-        $customOptions = $this->getCustomOptions('product');
-        if(!empty($customOptions)) {
-            $products->addAttributeToFilter('entity_id', array('in' => $customOptions));
+        $productId = $this->getProductId(); 
+        if(!empty($productId)) {
+            $product = Mage::getModel('catalog/product')->load($productId);
+            return Mage::helper('emailtester')->getProductOutput($product);
         }
-
-        $options = array();
-        foreach($products as $product) {
-            $value = $product->getId();
-            $label = '['.$product->getId().'] '.$product->getName();
-            $current = ($product->getId() == $currentValue) ? true : false;
-            $options[] = array('value' => $value, 'label' => $label, 'current' => $current);
-        }
-        return $options;
     }
-    
+
     /**
      * Render block HTML
      *
@@ -77,3 +60,4 @@ class Yireo_EmailTester_Block_Form_Product extends Yireo_EmailTester_Block_Form_
         return parent::_toHtml();
     }
 }
+
