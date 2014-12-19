@@ -16,7 +16,7 @@
  */
 class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Action
 {
-    private function outputMail($template, $email, $storeId, $customerId, $productId, $orderId)
+    protected function outputMail($template, $email, $storeId, $customerId, $productId, $orderId)
     {             
         // Load the mail
         $mailer = Mage::getModel('emailtester/mailer');
@@ -31,7 +31,7 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
         $mailer->doPrint();
     }
 
-    private function sendMail($template, $email, $storeId, $customerId, $productId, $orderId)
+    protected function sendMail($template, $email, $storeId, $customerId, $productId, $orderId)
     {             
         // Load the mail
         $mailer = Mage::getModel('emailtester/mailer');

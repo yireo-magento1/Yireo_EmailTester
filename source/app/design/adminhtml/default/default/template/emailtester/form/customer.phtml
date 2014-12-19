@@ -18,12 +18,18 @@ $customer = $this->getCustomer();
                 <label for="customer_id"><?php echo Mage::helper('emailtester')->__('Customer')?></label>
             </td>
             <td width="80" class="value">
+                <?php $help = Mage::helper('emailtester')->__('Type in the numerical ID of the customer, or use the search on the right.'); ?>
                 <input name="customer_id" id="customer_id" class="input-text" style="width:50px;" 
-                    value="<?php echo $this->getCustomerId(); ?>" placeholder="ID" />
+                    value="<?php echo $this->getCustomerId(); ?>" placeholder="<?php echo $this->__('ID'); ?>" title="<?php echo $help; ?>" />
             </td>
             <td class="value">
+                <?php $placeholder = Mage::helper('emailtester')->__('Start typing to search for a customer'); ?>
+                <?php $help = Mage::helper('emailtester')->__('Start typing to search for a customer. A dropdown will show you results automatically.'); ?>
                 <input name="customer_search" id="customer_search" class="input-text" style="width:300px;"
-                    value="<?php echo $this->getCustomerSearch(); ?>" placeholder="<?php echo Mage::helper('emailtester')->__('Customer search')?>" />
+                    value="<?php echo $this->getCustomerSearch(); ?>" placeholder="<?php echo $placeholder; ?>" title="<?php echo $help; ?>" />
+                <button type="button" class="cancel" onclick="clearInput('customer_id', 'customer_search');">
+                    <span><span><span><?php echo $this->__('Clear'); ?></span></span></span>
+                </button>
             </td>
         </tr>
     </tbody>

@@ -45,6 +45,15 @@
 </div>
 
 <script type="text/javascript">
+jQuery(function() {
+    var tooltips = jQuery('[title]').tooltip({
+      position: {
+        my: "left top",
+        at: "right+5 top-5"
+      }
+    });
+  });
+
 var emailtesterForm = new varienForm('emailtester_form');
 function emailtesterPrepareForm() {
     if($$('[name="store"]')[0].value < 1) {
@@ -66,6 +75,12 @@ function emailtesterPrint() {
         emailtesterForm.submit('<?php echo $this->getOutputUrl(); ?>');
         return true;
     }
+    return false;
+}
+
+function clearInput(id1, id2) {
+    jQuery('#' + id1).val('');
+    jQuery('#' + id2).val('');
     return false;
 }
 </script>

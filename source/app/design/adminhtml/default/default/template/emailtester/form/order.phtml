@@ -17,12 +17,18 @@
                 <label for="order_id"><?php echo Mage::helper('emailtester')->__('Order')?></label>
             </td>
             <td width="80" class="value">
+                <?php $help = Mage::helper('emailtester')->__('Type in the numerical ID of the order, or use the search on the right.'); ?>
                 <input name="order_id" id="order_id" class="input-text required-entry" style="width:50px;" 
-                    value="<?php echo $this->getOrderId(); ?>" placeholder="ID" />
+                    value="<?php echo $this->getOrderId(); ?>" placeholder="<?php echo $this->__('ID'); ?>" title="<?php echo $help; ?>" />
             </td>
             <td class="value">
+                <?php $placeholder = Mage::helper('emailtester')->__('Start typing to search for an order'); ?>
+                <?php $help = Mage::helper('emailtester')->__('Start typing to search for an order. A dropdown will show you results automatically.'); ?>
                 <input name="order_search" id="order_search" class="input-text" style="width:300px"
-                    value="<?php echo $this->getOrderSearch(); ?>" placeholder="<?php echo Mage::helper('emailtester')->__('Order search')?>" />
+                    value="<?php echo $this->getOrderSearch(); ?>" placeholder="<?php echo $placeholder; ?>" title="<?php echo $help; ?>" />
+                <button type="button" class="cancel" onclick="clearInput('order_id', 'order_search');">
+                    <span><span><span><?php echo $this->__('Clear'); ?></span></span></span>
+                </button>
             </td>
         </tr>
     </tbody>

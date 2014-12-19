@@ -8,9 +8,9 @@
             <action method="addItem"><type>skin_css</type><name>css/emailtester/jquery-ui.min.css</name></action>
             <action method="addItem"><type>skin_css</type><name>css/emailtester/jquery-ui.theme.css</name></action>
             <action method="addItem"><type>skin_css</type><name>css/emailtester/jquery-ui.structure.min.css</name></action>
-            <action method="addItem"><type>skin_js</type><name>js/emailtester/jquery.js</name></action>
-            <action method="addItem"><type>skin_js</type><name>js/emailtester/jquery-noconflict.js</name></action>
-            <action method="addItem"><type>skin_js</type><name>js/emailtester/jquery-ui.min.js</name></action>
+            <action method="addItem" ifconfig="emailtester/settings/enable_jquery"><type>skin_js</type><name>js/emailtester/jquery.js</name></action>
+            <action method="addItem" ifconfig="emailtester/settings/enable_jquery"><type>skin_js</type><name>js/emailtester/jquery-noconflict.js</name></action>
+            <action method="addItem" ifconfig="emailtester/settings/enable_jqueryui"><type>skin_js</type><name>js/emailtester/jquery-ui.min.js</name></action>
             <action method="addItem"><type>skin_js</type><name>js/emailtester/emailtester.js</name></action>
         </reference>
     </adminhtml_emailtester_index>

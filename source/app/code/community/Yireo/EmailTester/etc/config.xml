@@ -13,7 +13,7 @@
 
     <modules>
         <Yireo_EmailTester>
-            <version>1.0.17</version>
+            <version>1.0.19</version>
         </Yireo_EmailTester>
     </modules>
 
@@ -121,6 +121,8 @@
                 <limit_product>20</limit_product>
                 <limit_customer>20</limit_customer>
                 <limit_order>20</limit_order>
+                <enable_jquery>1</enable_jquery>
+                <enable_jqueryui>1</enable_jqueryui>
             </settings>
         </emailtester>
     </default>
