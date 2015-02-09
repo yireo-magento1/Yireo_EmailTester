@@ -25,6 +25,16 @@
                 <?php $help = Mage::helper('emailtester')->__('Start typing to search for a product. A dropdown will show you results automatically.'); ?>
                 <input name="product_search" id="product_search" class="input-text" style="width:300px;"
                     value="<?php echo $this->getProductSearch(); ?>" placeholder="<?php echo $placeholder; ?>" title="<?php echo $help; ?>" />
+
+                <?php if($this->getProductOptions()) : ?>
+                <select name="product_select" id="product_select">
+                    <?php foreach($this->getProductOptions() as $option) : ?>
+                    <?php $selected = ($option['current']) ? 'selected="selected"' : null; ?>
+                    <option value="<?php echo $option['value']; ?>" <?php echo $selected; ?>><?php echo $option['label']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <?php endif; ?>
+
                 <button type="button" class="cancel" onclick="clearInput('product_id', 'product_search');">
                     <span><span><span><?php echo $this->__('Clear'); ?></span></span></span>
                 </button>

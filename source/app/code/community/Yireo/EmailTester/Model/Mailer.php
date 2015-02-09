@@ -33,11 +33,18 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
             $mail->loadDefault($template, $localeCode);
         }
 
-        // @todo: Send some extra headers
-        //@header('Content-Type: text/html; charset=UTF-8');
+        // Send some extra headers just make sure the document is compliant
+        @header('Content-Type: text/html; charset=UTF-8');
 
-        $text = $mail->getProcessedTemplate($variables, true);
-        echo $text;
+        $body = $mail->getProcessedTemplate($variables, true);
+        $fixHeader = (bool)Mage::getStoreConfig('emailtester/settings/fix_header');
+
+        if(strstr($body, '<html') == false && $fixHeader == true) {
+            echo Mage::app()->getLayout()->createBlock('emailtester/print')->setBody($body)->toHtml();
+        } else {
+            echo $body;
+        }
+
         exit;
     }
 
@@ -128,7 +135,7 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
         } else {
             $customer = Mage::getModel('customer/customer')->load($this->getCustomerId());
         }
-        $customer->setPassword('fakepassword');
+        $customer->setPassword('p@$$w0rd');
         
         // Try to load the payment block
         try {
@@ -139,14 +146,24 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
         
         // Try to load the invoice
         try {
-            $invoice = $order->getInvoiceCollection()->getFirstItem();
+            $invoices = $order->getInvoiceCollection();
+            if($invoices) {
+                $invoice = $invoices->getFirstItem();
+            } else {
+                $invoice = Mage::getModel('sales/order_invoice');
+            }
         } catch(Exception $e) {
             $invoice = Mage::getModel('sales/order_invoice');
         }
 
         // Try to load the shipment
         try {
-            $shipment = $order->getShipmentsCollection()->getFirstItem();
+            $shipments = $order->getShipmentsCollection();
+            if($shipments) {
+                $shipment = $shipments->getFirstItem();
+            } else {
+                $shipment = Mage::getModel('sales/order_shipment');
+            }
         } catch(Exception $e) {
             $shipment = Mage::getModel('sales/order_shipment');
         }

@@ -27,7 +27,17 @@ $customer = $this->getCustomer();
                 <?php $help = Mage::helper('emailtester')->__('Start typing to search for a customer. A dropdown will show you results automatically.'); ?>
                 <input name="customer_search" id="customer_search" class="input-text" style="width:300px;"
                     value="<?php echo $this->getCustomerSearch(); ?>" placeholder="<?php echo $placeholder; ?>" title="<?php echo $help; ?>" />
-                <button type="button" class="cancel" onclick="clearInput('customer_id', 'customer_search');">
+
+                <?php if($this->getCustomerOptions()) : ?>
+                <select name="customer_select" id="customer_select">
+                    <?php foreach($this->getCustomerOptions() as $option) : ?>
+                    <?php $selected = ($option['current']) ? 'selected="selected"' : null; ?>
+                    <option value="<?php echo $option['value']; ?>" <?php echo $selected; ?>><?php echo $option['label']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <?php endif; ?>
+
+                <button type="button" class="cancel" onclick="clearInput('customer_id', 'customer_search', 'customer_select');">
                     <span><span><span><?php echo $this->__('Clear'); ?></span></span></span>
                 </button>
             </td>

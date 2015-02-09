@@ -26,7 +26,17 @@
                 <?php $help = Mage::helper('emailtester')->__('Start typing to search for an order. A dropdown will show you results automatically.'); ?>
                 <input name="order_search" id="order_search" class="input-text" style="width:300px"
                     value="<?php echo $this->getOrderSearch(); ?>" placeholder="<?php echo $placeholder; ?>" title="<?php echo $help; ?>" />
-                <button type="button" class="cancel" onclick="clearInput('order_id', 'order_search');">
+
+                <?php if($this->getOrderOptions()) : ?>
+                <select name="order_select" id="order_select">
+                    <?php foreach($this->getOrderOptions() as $option) : ?>
+                    <?php $selected = ($option['current']) ? 'selected="selected"' : null; ?>
+                    <option value="<?php echo $option['value']; ?>" <?php echo $selected; ?>><?php echo $option['label']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <?php endif; ?>
+
+                <button type="button" class="cancel" onclick="clearInput('order_id', 'order_search', 'order_select');">
                     <span><span><span><?php echo $this->__('Clear'); ?></span></span></span>
                 </button>
             </td>

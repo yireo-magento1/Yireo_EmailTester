@@ -1,6 +1,6 @@
 <?php
 /**
- * Yireo EmailTester for Magento 
+ * Yireo EmailTester for Magento
  *
  * @package     Yireo_EmailTester
  * @author      Yireo (http://www.yireo.com/)
@@ -22,24 +22,25 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
         $this->setTemplate('emailtester/form.phtml');
         parent::_construct();
     }
-    
+
     public function getSendUrl()
     {
         return Mage::getModel('adminhtml/url')->getUrl('adminhtml/emailtester/mail');
     }
-    
+
     public function getOutputUrl()
     {
         return Mage::getModel('adminhtml/url')->getUrl('adminhtml/emailtester/output');
     }
-    
+
     public function getStore()
     {
-        $storeId = (int)$this->getRequest()->getParam('store');
-        if(!$storeId > 0) {
+        $storeId = (int) $this->getRequest()->getParam('store');
+        if (!$storeId > 0) {
             $storeId = Mage::getSingleton('adminhtml/session')->getData('emailtester.store');
         }
 
+        Mage::getSingleton('adminhtml/session')->setData('emailtester.store', $storeId);
         return $storeId;
     }
 
@@ -59,9 +60,9 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
     public function getVersion()
     {
         $config = Mage::app()->getConfig()->getModuleConfig('Yireo_EmailTester');
-        return (string)$config->version;
+        return (string) $config->version;
     }
-    
+
     /**
      * Render block HTML
      *
@@ -72,63 +73,63 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
         $accordion = $this->getLayout()->createBlock('adminhtml/widget_accordion')->setId('emailtester');
 
         $accordion->addItem('generic', array(
-            'title'   => Mage::helper('emailtester')->__('Generic'),
+            'title' => Mage::helper('emailtester')->__('Generic'),
             'content' => $this->getLayout()->createBlock('emailtester/form_generic')->toHtml(),
-            'open'    => true,
+            'open' => true,
         ));
 
         $accordion->addItem('customer', array(
-            'title'   => Mage::helper('emailtester')->__('Customer'),
+            'title' => Mage::helper('emailtester')->__('Customer'),
             'content' => $this->getLayout()->createBlock('emailtester/form_customer')->toHtml(),
-            'open'    => true,
+            'open' => true,
         ));
 
         $accordion->addItem('product', array(
-            'title'   => Mage::helper('emailtester')->__('Product'),
+            'title' => Mage::helper('emailtester')->__('Product'),
             'content' => $this->getLayout()->createBlock('emailtester/form_product')->toHtml(),
-            'open'    => true,
+            'open' => true,
         ));
 
         $accordion->addItem('order', array(
-            'title'   => Mage::helper('emailtester')->__('Order'),
+            'title' => Mage::helper('emailtester')->__('Order'),
             'content' => $this->getLayout()->createBlock('emailtester/form_order')->toHtml(),
-            'open'    => true,
+            'open' => true,
         ));
 
         $this->setChild('accordion', $accordion);
 
         $this->setChild('output_button',
             $this->getLayout()->createBlock('adminhtml/widget_button')
-                ->setData(array(
-                    'label'     => Mage::helper('emailtester')->__('Print Email'),
-                    'onclick'   => 'emailtesterPrint()',
-                    'class' => 'save'
-                ))
+                 ->setData(array(
+                     'label' => Mage::helper('emailtester')->__('Print Email'),
+                     'onclick' => 'emailtesterPrint()',
+                     'class' => 'save',
+                 ))
         );
 
         $this->setChild('send_button',
             $this->getLayout()->createBlock('adminhtml/widget_button')
-                ->setData(array(
-                    'label'     => Mage::helper('emailtester')->__('Send Email'),
-                    'onclick'   => 'emailtesterEmail()',
-                    'class' => 'save'
-                ))
+                 ->setData(array(
+                     'label' => Mage::helper('emailtester')->__('Send Email'),
+                     'onclick' => 'emailtesterEmail()',
+                     'class' => 'save',
+                 ))
         );
 
         $check = $this->getLayout()->createBlock('emailtester/form_check')->setId('check');
         $this->setChild('check', $check);
-            
+
         $rt = parent::_toHtml();
 
         return $rt;
     }
-    
+
     protected function _prepareLayout()
     {
         $this->getRequest()->setParam('store', $this->getStore());
         $block = $this->getLayout()->createBlock('adminhtml/store_switcher')
-            ->setUseConfirm(false)
-            ->setSwitchUrl($this->getUrl('*/*/*', array('store' => null)));
+                      ->setUseConfirm(false)
+                      ->setSwitchUrl($this->getUrl('*/*/*', array('store' => null)));
         $this->setChild('store_switcher', $block);
         return parent::_prepareLayout();
     }

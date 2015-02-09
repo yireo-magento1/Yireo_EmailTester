@@ -1,6 +1,6 @@
 <?php
 /**
- * Yireo EmailTester for Magento 
+ * Yireo EmailTester for Magento
  *
  * @package     Yireo_EmailTester
  * @author      Yireo (http://www.yireo.com/)
@@ -17,7 +17,7 @@
 class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Action
 {
     protected function outputMail($template, $email, $storeId, $customerId, $productId, $orderId)
-    {             
+    {
         // Load the mail
         $mailer = Mage::getModel('emailtester/mailer');
         $mailer->setTemplate($template);
@@ -26,13 +26,13 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
         $mailer->setOrderId($orderId);
         $mailer->setProductId($productId);
         $mailer->setCustomerId($customerId);
-        
+
         // Print the mail
         $mailer->doPrint();
     }
 
     protected function sendMail($template, $email, $storeId, $customerId, $productId, $orderId)
-    {             
+    {
         // Load the mail
         $mailer = Mage::getModel('emailtester/mailer');
         $mailer->setTemplate($template);
@@ -41,9 +41,9 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
         $mailer->setOrderId($orderId);
         $mailer->setProductId($productId);
         $mailer->setCustomerId($customerId);
-        
+
         // Send the mail
-        if($mailer->send() == true) {
+        if ($mailer->send() == true) {
             Mage::getModel('adminhtml/session')->addSuccess($this->__('Mail sent to %s', $mailer->getEmail()));
             return true;
         } else {
@@ -55,8 +55,12 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
     protected function getPostValue($name)
     {
         $value = $this->getRequest()->getParam($name);
-        if(!empty($value)) {
-            Mage::getSingleton('adminhtml/session')->setData('emailtester.'.$name, $value);
+        if (empty($value)) {
+            $value = Mage::getSingleton('adminhtml/session')->getData('emailtester.' . $name);
+        }
+
+        if (!empty($value)) {
+            Mage::getSingleton('adminhtml/session')->setData('emailtester.' . $name, $value);
         }
         return $value;
     }
@@ -72,39 +76,46 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
     {
         $headBlock = $this->getLayout()->getBlock('head');
         $title = $headBlock->getTitle();
-        if(!is_array($subtitles)) $subtitles = array($subtitles);
-        $headBlock->setTitle(implode(' / ', $subtitles).' / '.$title);
+        if (!is_array($subtitles)) {
+            $subtitles = array($subtitles);
+        }
+
+        $headBlock->setTitle(implode(' / ', $subtitles) . ' / ' . $title);
     }
 
     protected function getCustomerData($search)
     {
         $limit = Mage::getStoreConfig('emailtester/settings/limit_customer');
-        if($limit > 100) $limit = 100;
-        if($limit < 10) $limit = 10;
+        if ($limit > 100) {
+            $limit = 100;
+        }
 
-        $customers = Mage::getModel('customer/customer')->getCollection()
+        if ($limit < 10) {
+            $limit = 10;
+        }
+
+        $customers = Mage::getModel('customer/customer')->getCollection();
+        $customers
             ->addAttributeToSelect(array('email', 'firstname', 'lastname'))
             ->setCurPage(0)
             ->setPageSize($limit)
         ;
 
         $customers->addAttributeToFilter(array(
-            array('attribute' => 'firstname', 'like' => '%'.$search.'%'),
-            array('attribute' => 'lastname', 'like' => '%'.$search.'%'),
-            array('attribute' => 'email', 'like' => '%'.$search.'%'),
+            array('attribute' => 'firstname', 'like' => '%' . $search . '%'),
+            array('attribute' => 'lastname', 'like' => '%' . $search . '%'),
+            array('attribute' => 'email', 'like' => '%' . $search . '%'),
         ));
 
-        /*
-        $storeId = $this->getStoreId();
-        if($storeId > 0) {
+        $storeId = Mage::getSingleton('adminhtml/session')->getData('emailtester.store');
+        if ($storeId > 0) {
             $store = Mage::getModel('core/store')->load($storeId);
             $websiteId = $store->getWebsiteId();
             $customers->addAttributeToFilter('website_id', $websiteId);
         }
-        */
 
         $data = array();
-        foreach($customers as $customer) {
+        foreach ($customers as $customer) {
             $customer = $customer->load($customer->getId());
             $data[] = array(
                 'id' => $customer->getId(),
@@ -118,22 +129,28 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
     protected function getProductData($search)
     {
         $limit = Mage::getStoreConfig('emailtester/settings/limit_product');
-        if($limit > 100) $limit = 100;
-        if($limit < 10) $limit = 10;
+        if ($limit > 100) {
+            $limit = 100;
+        }
 
-        $products = Mage::getModel('catalog/product')->getCollection()
+        if ($limit < 10) {
+            $limit = 10;
+        }
+
+        $products = Mage::getModel('catalog/product')
+            ->getCollection()
             ->addAttributeToSelect(array('sku', 'name', 'short_description'))
             ->setCurPage(0)
             ->setPageSize($limit)
         ;
 
         $products->addAttributeToFilter(array(
-            array('attribute' => 'name', 'like' => '%'.$search.'%'),
-            array('attribute' => 'sku', 'like' => '%'.$search.'%'),
+            array('attribute' => 'name', 'like' => '%' . $search . '%'),
+            array('attribute' => 'sku', 'like' => '%' . $search . '%'),
         ));
 
         $data = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $product = $product->load($product->getId());
             $data[] = array(
                 'id' => $product->getId(),
@@ -147,18 +164,38 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
     protected function getOrderData($search)
     {
         $limit = Mage::getStoreConfig('emailtester/settings/limit_order');
-        if($limit > 100) $limit = 100;
-        if($limit < 10) $limit = 10;
+        if ($limit > 100) {
+            $limit = 100;
+        }
 
-        $orders = Mage::getModel('sales/order')->getCollection()
+        if ($limit < 10) {
+            $limit = 10;
+        }
+
+        $orders = Mage::getModel('sales/order')
+            ->getCollection()
             ->setCurPage(0)
             ->setPageSize($limit)
+            ->addFieldToSelect('*')
         ;
 
-        $orders->addFieldToFilter('increment_id', array('like' => '%'.$search.'%'));
+        $storeId = Mage::getSingleton('adminhtml/session')->getData('emailtester.store');
+        if ($storeId > 0) {
+            $orders->addFieldToFilter('store_id', $storeId);
+        }
+
+        $orders->addFieldToFilter(
+            array('increment_id', 'customer_email', 'customer_firstname', 'customer_lastname'),
+            array(
+                array('like' => '%' . $search . '%'),
+                array('like' => '%' . $search . '%'),
+                array('like' => '%' . $search . '%'),
+                array('like' => '%' . $search . '%'),
+            )
+        );
 
         $data = array();
-        foreach($orders as $order) {
+        foreach ($orders as $order) {
             $order = $order->load($order->getId());
             $data[] = array(
                 'id' => $order->getId(),

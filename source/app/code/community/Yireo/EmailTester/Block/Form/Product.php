@@ -31,6 +31,34 @@ class Yireo_EmailTester_Block_Form_Product extends Yireo_EmailTester_Block_Form_
         }
         return $currentValue;
     }
+
+    public function getProductOptions()
+    {
+        $options = array('value' => '', 'label' => '');
+        $currentValue = $this->getProductId();
+        $limit = Mage::getStoreConfig('emailtester/settings/limit_product');
+
+        $products = Mage::getModel('catalog/product')->getCollection()
+            ->addAttributeToSelect('*')
+            ->setOrder('entity_id', 'DESC')
+        ;
+
+        if($limit > 0) $products->setPage(0, $limit);
+
+        $customOptions = $this->getCustomOptions('product');
+        if(!empty($customOptions)) {
+            $products->addAttributeToFilter('entity_id', array('in' => $customOptions));
+        }
+
+        foreach($products as $product) {
+            $value = $product->getId();
+            $label = '['.$product->getId().'] '.$product->getName();
+            $current = ($product->getId() == $currentValue) ? true : false;
+            $options[] = array('value' => $value, 'label' => $label, 'current' => $current);
+        }
+
+        return $options;
+    }
     
     public function getProductSearch()
     {
