@@ -34,7 +34,7 @@ class Yireo_EmailTester_Block_Form_Customer extends Yireo_EmailTester_Block_Form
 
     public function getCustomerOptions()
     {
-        $options = array('value' => '', 'label' => '');
+        $options = array('value' => '', 'label' => '', 'current' => null);
         $currentValue = $this->getCustomerId();
         $limit = Mage::getStoreConfig('emailtester/settings/limit_customer');
 
