@@ -130,12 +130,24 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
         $store = Mage::getModel('core/store')->load($storeId);
         $product = Mage::getModel('catalog/product')->load($this->getProductId());
         $order = Mage::getModel('sales/order')->load($this->getOrderId());
-        if($order->getCustomerId() > 0) {
+
+        if($order->getCustomerId() > 0 && $this->getCustomerId() == 0) {
             $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
         } else {
             $customer = Mage::getModel('customer/customer')->load($this->getCustomerId());
         }
+
+        // Complete other customer fields
         $customer->setPassword('p@$$w0rd');
+
+        // Set the customer into the order
+        if($customer->getId() > 0) {
+            $order->setCustomerId($customer->getId());
+            $order->setCustomer($customer);
+            foreach($customer->getData() as $name => $value) {
+                $order->setData('customer_'.$name, $value);
+            }
+        }
         
         // Try to load the payment block
         try {

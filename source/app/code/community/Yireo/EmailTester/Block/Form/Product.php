@@ -34,7 +34,8 @@ class Yireo_EmailTester_Block_Form_Product extends Yireo_EmailTester_Block_Form_
 
     public function getProductOptions()
     {
-        $options = array('value' => '', 'label' => '');
+        $options = array();
+        $options[] = array('value' => '', 'label' => '', 'current' => null);
         $currentValue = $this->getProductId();
         $limit = Mage::getStoreConfig('emailtester/settings/limit_product');
 

@@ -34,7 +34,8 @@ class Yireo_EmailTester_Block_Form_Order extends Yireo_EmailTester_Block_Form_Ab
 
     public function getOrderOptions()
     {
-        $options = array('value' => '', 'label' => '');
+        $options = array();
+        $options[] = array('value' => '', 'label' => '', 'current' => null);
         $limit = Mage::getStoreConfig('emailtester/settings/limit_order');
         $currentValue = $this->getOrderId();
 
