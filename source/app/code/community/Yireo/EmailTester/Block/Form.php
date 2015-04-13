@@ -47,7 +47,16 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
     public function getDefaultStoreId()
     {
         $websites = Mage::app()->getWebsites(true);
-        return $websites[1]->getDefaultStore()->getId();
+        if (empty($websites[1]) || !is_object($websites[1])) {
+            return 0;
+        }
+
+        $defaultStore = $websites[1]->getDefaultStore();
+        if (empty($defaultStore)) {
+            return 0;
+        }
+
+        return $defaultStore->getId();
     }
 
     /**
