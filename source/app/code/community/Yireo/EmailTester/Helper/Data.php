@@ -13,23 +13,19 @@
  */
 class Yireo_EmailTester_Helper_Data extends Mage_Core_Helper_Abstract
 {
-    /*
+    /**
      * Switch to determine whether this extension is enabled or not
-     * 
-     * @access public
-     * @param null
-     * @return string
+     *
+     * @return bool
      */
     public function enabled()
     {
-        return true;
+        return Mage::getStoreConfig('emailtester/settings/enabled');
     }
 
     /*
      * Return the default email
-     * 
-     * @access public
-     * @param null
+     *
      * @return string
      */
     public function getDefaultEmail()
@@ -37,18 +33,39 @@ class Yireo_EmailTester_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('emailtester/settings/default_email');
     }
 
-    public function getCustomerOutput($customer)
+    /**
+     * Output a string describing a customer record
+     *
+     * @param Mage_Customer_Model_Customer $customer
+     *
+     * @return string
+     */
+    public function getCustomerOutput(Mage_Customer_Model_Customer $customer)
     {
-        return $customer->getName() . ' ['.$customer->getEmail().']';
+        return $customer->getName() . ' ['.$customer->getData('email').']';
     }
 
-    public function getProductOutput($product)
+    /**
+     * Output a string describing a product record
+     *
+     * @param Mage_Catalog_Model_Product $product
+     *
+     * @return string
+     */
+    public function getProductOutput(Mage_Catalog_Model_Product $product)
     {
         return $product->getName() . ' ['.$product->getSku().']';
     }
 
-    public function getOrderOutput($order)
+    /**
+     * Output a string describing a customer record
+     *
+     * @param Mage_Sales_Model_Order $order
+     *
+     * @return string
+     */
+    public function getOrderOutput(Mage_Sales_Model_Order $order)
     {
-        return $order->getIncrementId() . ' ['.$order->getCustomerEmail().']';
+        return '#'.$order->getIncrementId() . ' ['.$order->getCustomerEmail().' / '.$order->getState().']';
     }
 }

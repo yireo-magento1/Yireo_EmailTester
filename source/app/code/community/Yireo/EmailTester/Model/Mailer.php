@@ -12,7 +12,10 @@
  * EmailTester Core model
  */
 class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
-{    
+{
+    /**
+     * Output the email
+     */
     public function doPrint()
     {
         $this->prepare();
@@ -34,7 +37,9 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
         }
 
         // Send some extra headers just make sure the document is compliant
-        @header('Content-Type: text/html; charset=UTF-8');
+        if (headers_sent() == false) {
+            header('Content-Type: text/html; charset=UTF-8');
+        }
 
         $body = $mail->getProcessedTemplate($variables, true);
         $fixHeader = (bool)Mage::getStoreConfig('emailtester/settings/fix_header');
@@ -48,6 +53,11 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
         exit;
     }
 
+    /**
+     * Send the email
+     *
+     * @return bool
+     */
     public function send()
     {
         $this->prepare();
@@ -75,7 +85,6 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
         if(empty($recipientName)) {
             $recipientName = $senderName;
         }
-
 
         $rt = false;
         $sent = false;
@@ -106,14 +115,25 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
         return true;
     }
 
+    /**
+     * Get the email template object
+     *
+     * @return Mage_Core_Model_Email_Template
+     */
     public function getEmailTemplate()
     {
         $storeId = $this->getStoreId();
         $mail = Mage::getModel('core/email_template');
         $mail->setDesignConfig(array('area' => 'frontend', 'store' => $storeId));
+
         return $mail;
     }
 
+    /**
+     * Prepare for the main action
+     *
+     * @throws Mage_Core_Exception
+     */
     public function prepare()
     {
         $storeId = $this->getStoreId();
@@ -121,7 +141,14 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
             $this->setStoreId(Mage::app()->getWebsite()->getDefaultGroup()->getDefaultStoreId());
         }
     }
-    
+
+    /**
+     * Collect all variables to insert into the email template
+     *
+     * @param $storeId
+     *
+     * @return array
+     */
     public function getVariables($storeId)
     {
         $appEmulation = Mage::getSingleton('core/app_emulation');
@@ -131,10 +158,25 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
         $product = Mage::getModel('catalog/product')->load($this->getProductId());
         $order = Mage::getModel('sales/order')->load($this->getOrderId());
 
+        // Load the first product instead
+        if(!$product->getId() > 0) {
+            $product = Mage::getModel('catalog/product')->getCollection()->getFirstItem();
+        }
+
+        // Load the first order instead
+        if(!$order->getId() > 0) {
+            $order = Mage::getModel('sales/order')->getCollection()->getFirstItem();
+        }
+
         if($order->getCustomerId() > 0 && $this->getCustomerId() == 0) {
             $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
         } else {
             $customer = Mage::getModel('customer/customer')->load($this->getCustomerId());
+        }
+
+        // Load the first customer instead
+        if(!$customer->getId() > 0) {
+            $customer = Mage::getModel('customer/customer')->getCollection()->getFirstItem();
         }
 
         // Complete other customer fields
@@ -182,7 +224,7 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
 
         // Try to load the creditmemos
         $creditmemos = $order->getCreditmemosCollection();
-        if($creditmemos->getSize() > 0) {
+        if(!empty($creditmemos) && $creditmemos->getSize() > 0) {
             $creditmemo = $creditmemos->getFirstItem();
         } else {
             $creditmemo = null;
@@ -208,7 +250,15 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
         
         return $variables;
     }
-    
+
+    /**
+     *
+     *
+     * @param $order
+     * @param $storeId
+     *
+     * @return null
+     */
     public function getPaymentBlockHtml($order, $storeId)
     {
         try {

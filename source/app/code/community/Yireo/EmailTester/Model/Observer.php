@@ -17,7 +17,6 @@ class Yireo_EmailTester_Model_Observer extends Mage_Core_Model_Abstract
     /**
      * Listen to the event core_block_abstract_to_html_before
      *
-     * @access public
      * @parameter Varien_Event_Observer $observer
      * @return $this
      */
@@ -46,7 +45,6 @@ class Yireo_EmailTester_Model_Observer extends Mage_Core_Model_Abstract
     /*
      * Method fired on the event <controller_action_predispatch>
      *
-     * @access public
      * @param Varien_Event_Observer $observer
      * @return Yireo_EmailTester_Model_Observer
      */

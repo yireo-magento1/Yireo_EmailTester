@@ -12,6 +12,7 @@
             <action method="addItem" ifconfig="emailtester/settings/enable_jquery"><type>skin_js</type><name>js/emailtester/jquery-noconflict.js</name></action>
             <action method="addItem" ifconfig="emailtester/settings/enable_jqueryui"><type>skin_js</type><name>js/emailtester/jquery-ui.min.js</name></action>
             <action method="addItem"><type>skin_js</type><name>js/emailtester/emailtester.js</name></action>
+            <action method="addItem"><type>skin_css</type><name>css/emailtester/emailtester.css</name></action>
         </reference>
     </adminhtml_emailtester_index>
 </layout>

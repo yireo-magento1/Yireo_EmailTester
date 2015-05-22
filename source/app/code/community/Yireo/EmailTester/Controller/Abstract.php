@@ -16,31 +16,41 @@
  */
 class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Action
 {
-    protected function outputMail($template, $email, $storeId, $customerId, $productId, $orderId)
+    /**
+     * Output the email in the browser
+     *
+     * @return void
+     */
+    protected function outputMail()
     {
-        // Load the mail
+        /* @var Yireo_EmailTester_Model_Mailer $mailer */
         $mailer = Mage::getModel('emailtester/mailer');
-        $mailer->setTemplate($template);
-        $mailer->setEmail($email);
-        $mailer->setStoreId($storeId);
-        $mailer->setOrderId($orderId);
-        $mailer->setProductId($productId);
-        $mailer->setCustomerId($customerId);
+        $mailer->setTemplate($this->template);
+        $mailer->setEmail($this->email);
+        $mailer->setStoreId($this->storeId);
+        $mailer->setOrderId($this->orderId);
+        $mailer->setProductId($this->productId);
+        $mailer->setCustomerId($this->customerId);
 
         // Print the mail
         $mailer->doPrint();
     }
 
-    protected function sendMail($template, $email, $storeId, $customerId, $productId, $orderId)
+    /**
+     * Send the email to a recipient
+     *
+     * @return bool
+     */
+    protected function sendMail()
     {
-        // Load the mail
+        /* @var Yireo_EmailTester_Model_Mailer $mailer */
         $mailer = Mage::getModel('emailtester/mailer');
-        $mailer->setTemplate($template);
-        $mailer->setEmail($email);
-        $mailer->setStoreId($storeId);
-        $mailer->setOrderId($orderId);
-        $mailer->setProductId($productId);
-        $mailer->setCustomerId($customerId);
+        $mailer->setTemplate($this->template);
+        $mailer->setEmail($this->email);
+        $mailer->setStoreId($this->storeId);
+        $mailer->setOrderId($this->orderId);
+        $mailer->setProductId($this->productId);
+        $mailer->setCustomerId($this->customerId);
 
         // Send the mail
         if ($mailer->send() == true) {
@@ -52,6 +62,13 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
         }
     }
 
+    /**
+     * Get a certain POST value and store it in the session automatically
+     *
+     * @param $name
+     *
+     * @return mixed
+     */
     protected function getPostValue($name)
     {
         $value = $this->getRequest()->getParam($name);
@@ -65,12 +82,10 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
         return $value;
     }
 
-    /*
-     * Method to prepend a page-title
+    /**
+     * Prepend a page-title
      *
-     * @access public
      * @param $subtitles array
-     * @return null
      */
     protected function prependTitle($subtitles)
     {
@@ -83,6 +98,13 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
         $headBlock->setTitle(implode(' / ', $subtitles) . ' / ' . $title);
     }
 
+    /**
+     * Return a search for customer data
+     *
+     * @param $search
+     *
+     * @return array
+     */
     protected function getCustomerData($search)
     {
         $limit = Mage::getStoreConfig('emailtester/settings/limit_customer');
@@ -116,7 +138,6 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
 
         $data = array();
         foreach ($customers as $customer) {
-            $customer = $customer->load($customer->getId());
             $data[] = array(
                 'id' => $customer->getId(),
                 'value' => Mage::helper('emailtester')->getCustomerOutput($customer),
@@ -125,7 +146,13 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
 
         return $data;
     }
-
+    /**
+     * Return a search for product data
+     *
+     * @param $search
+     *
+     * @return array
+     */
     protected function getProductData($search)
     {
         $limit = Mage::getStoreConfig('emailtester/settings/limit_product');
@@ -151,7 +178,6 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
 
         $data = array();
         foreach ($products as $product) {
-            $product = $product->load($product->getId());
             $data[] = array(
                 'id' => $product->getId(),
                 'value' => Mage::helper('emailtester')->getProductOutput($product),
@@ -161,6 +187,13 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
         return $data;
     }
 
+    /**
+     * Return a search for order data
+     *
+     * @param $search
+     *
+     * @return array
+     */
     protected function getOrderData($search)
     {
         $limit = Mage::getStoreConfig('emailtester/settings/limit_order');
@@ -196,7 +229,6 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
 
         $data = array();
         foreach ($orders as $order) {
-            $order = $order->load($order->getId());
             $data[] = array(
                 'id' => $order->getId(),
                 'value' => Mage::helper('emailtester')->getOrderOutput($order),

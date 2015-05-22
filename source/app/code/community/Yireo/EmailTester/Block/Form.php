@@ -12,27 +12,40 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
 {
     /*
      * Constructor method
-     *
-     * @access public
-     * @param null
-     * @return null
      */
     public function _construct()
     {
         $this->setTemplate('emailtester/form.phtml');
+
         parent::_construct();
     }
 
+    /**
+     * Return the URL to send with
+     *
+     * @return string
+     */
     public function getSendUrl()
     {
         return Mage::getModel('adminhtml/url')->getUrl('adminhtml/emailtester/mail');
     }
 
+    /**
+     * Return the URL to
+     *
+     * @return string
+     */
     public function getOutputUrl()
     {
         return Mage::getModel('adminhtml/url')->getUrl('adminhtml/emailtester/output');
     }
 
+    /**
+     * Return the current store ID
+     *
+     * @return int
+     * @throws Exception
+     */
     public function getStore()
     {
         $storeId = (int) $this->getRequest()->getParam('store');
@@ -44,6 +57,11 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
         return $storeId;
     }
 
+    /**
+     * Return the default store ID
+     *
+     * @return int
+     */
     public function getDefaultStoreId()
     {
         $websites = Mage::app()->getWebsites(true);
@@ -62,8 +80,6 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
     /**
      * Return the delete URL
      *
-     * @access public
-     * @param null
      * @return string
      */
     public function getVersion()
@@ -79,6 +95,7 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
      */
     protected function _toHtml()
     {
+        /* @var Mage_Adminhtml_Block_Widget_Accordion $accordion */
         $accordion = $this->getLayout()->createBlock('adminhtml/widget_accordion')->setId('emailtester');
 
         $accordion->addItem('generic', array(
@@ -107,39 +124,50 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
 
         $this->setChild('accordion', $accordion);
 
-        $this->setChild('output_button',
-            $this->getLayout()->createBlock('adminhtml/widget_button')
+        /* @var Mage_Adminhtml_Block_Widget_Button $outputButton */
+        $outputButton =  $this->getLayout()->createBlock('adminhtml/widget_button')
                  ->setData(array(
                      'label' => Mage::helper('emailtester')->__('Print Email'),
                      'onclick' => 'emailtesterPrint()',
                      'class' => 'save',
-                 ))
-        );
+                 ));
+        $this->setChild('output_button', $outputButton);
 
-        $this->setChild('send_button',
-            $this->getLayout()->createBlock('adminhtml/widget_button')
+        /* @var Mage_Adminhtml_Block_Widget_Button $sendButton */
+        $sendButton = $this->getLayout()->createBlock('adminhtml/widget_button')
                  ->setData(array(
                      'label' => Mage::helper('emailtester')->__('Send Email'),
                      'onclick' => 'emailtesterEmail()',
                      'class' => 'save',
-                 ))
-        );
+                 ));
+        $this->setChild('send_button', $sendButton);
 
-        $check = $this->getLayout()->createBlock('emailtester/form_check')->setId('check');
-        $this->setChild('check', $check);
+        /* @var Yireo_EmailTester_Block_Form_Check $checkBlock */
+        $checkBlock = $this->getLayout()->createBlock('emailtester/form_check')->setId('check');
+        $this->setChild('check', $checkBlock);
 
         $rt = parent::_toHtml();
 
         return $rt;
     }
 
+    /**
+     * Prepare the layout
+     *
+     * @return Mage_Core_Block_Abstract
+     * @throws Exception
+     */
     protected function _prepareLayout()
     {
         $this->getRequest()->setParam('store', $this->getStore());
-        $block = $this->getLayout()->createBlock('adminhtml/store_switcher')
+
+        /* @var Mage_Adminhtml_Block_Store_Switcher $storeSwitcherBlock */
+        $storeSwitcherBlock = $this->getLayout()->createBlock('adminhtml/store_switcher')
                       ->setUseConfirm(false)
                       ->setSwitchUrl($this->getUrl('*/*/*', array('store' => null)));
-        $this->setChild('store_switcher', $block);
+
+        $this->setChild('store_switcher', $storeSwitcherBlock);
+
         return parent::_prepareLayout();
     }
 }

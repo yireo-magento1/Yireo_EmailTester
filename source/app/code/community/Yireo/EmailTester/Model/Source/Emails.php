@@ -8,8 +8,16 @@
  * @license     Open Source License (OSL v3)
  */
 
+/**
+ * Class Yireo_EmailTester_Model_Source_Emails
+ */
 class Yireo_EmailTester_Model_Source_Emails
 {
+    /**
+     * Return a list of email templates
+     *
+     * @return array
+     */
     public function toOptionArray()
     {
         $options = array();

@@ -11,7 +11,7 @@
 // Automatically delete the old controller-file
 $oldFile = dirname(__FILE__) . '/IndexController.php';
 if (is_file($oldFile)) {
-    @unlink($oldFile);
+    unlink($oldFile);
 }
 
 /**
@@ -25,8 +25,6 @@ class Yireo_EmailTester_EmailtesterController extends Yireo_EmailTester_Controll
     /**
      * Common method
      *
-     * @access protected
-     * @param null
      * @return Yireo_EmailTester_EmailtesterController
      */
     protected function _initAction()
@@ -43,32 +41,22 @@ class Yireo_EmailTester_EmailtesterController extends Yireo_EmailTester_Controll
 
     /**
      * Overview page
-     *
-     * @access public
-     * @param null
-     * @return null
      */
     public function indexAction()
     {
-        // Call upon the values to save them into the session
-        $template = $this->getPostValue('template');
-        $email = $this->getPostValue('email');
-        $storeId = (int) $this->getPostValue('store');
-        $customerId = (int) $this->getPostValue('customer_id');
-        $productId = (int) $this->getPostValue('product_id');
-        $orderId = (int) $this->getPostValue('order_id');
-
         $this->_initAction()
              ->_addContent($this->getLayout()->createBlock('emailtester/form'))
              ->renderLayout();
     }
 
+    /**
+     * Output JSON response
+     */
     public function ajaxAction()
     {
         $term = $this->getRequest()->getParam('term');
         $type = $this->getRequest()->getParam('type');
 
-        $data = array();
         if ($type == 'customer') {
             $data = $this->getCustomerData($term);
         } elseif ($type == 'order') {
@@ -83,41 +71,18 @@ class Yireo_EmailTester_EmailtesterController extends Yireo_EmailTester_Controll
 
     /**
      * Output an mail
-     *
-     * @access public
-     * @param null
-     * @return null
      */
     public function outputAction()
     {
-        $template = $this->getPostValue('template');
-        $email = $this->getPostValue('email');
-        $storeId = (int) $this->getPostValue('store');
-        $customerId = (int) $this->getPostValue('customer_id');
-        $productId = (int) $this->getPostValue('product_id');
-        $orderId = (int) $this->getPostValue('order_id');
+        $this->_gatherData();
 
-        if (Mage::app()->isSingleStoreMode()) {
-            $storeId = Mage::app()->getStore(true)->getId();
-        }
-
-        if (empty($template)) {
-            Mage::getModel('adminhtml/session')->addError($this->__('No transactional email specified'));
-            return $this->_redirect('adminhtml/emailtester/index');
-        }
-
-        if ($storeId < 1) {
-            Mage::getModel('adminhtml/session')->addError($this->__('You need to specify a specific Store View'));
-            return $this->_redirect('adminhtml/emailtester/index');
-        }
-
-        if (empty($orderId)) {
-            Mage::getModel('adminhtml/session')->addError($this->__('You need to specify a sales order'));
-            return $this->_redirect('adminhtml/emailtester/index');
+        if ($this->_preflightCheck() == false) {
+            $this->_redirect('adminhtml/emailtester/index');
+            return;
         }
 
         // Output the mail
-        $this->outputMail($template, $email, $storeId, $customerId, $productId, $orderId);
+        $this->outputMail();
     }
 
     /**
@@ -129,36 +94,60 @@ class Yireo_EmailTester_EmailtesterController extends Yireo_EmailTester_Controll
      */
     public function mailAction()
     {
-        $template = $this->getPostValue('template');
-        $email = $this->getPostValue('email');
-        $storeId = (int) $this->getPostValue('store');
-        $customerId = (int) $this->getPostValue('customer_id');
-        $productId = (int) $this->getPostValue('product_id');
-        $orderId = (int) $this->getPostValue('order_id');
+        $this->_gatherData();
 
-        if (Mage::app()->isSingleStoreMode()) {
-            $storeId = Mage::app()->getStore(true)->getId();
-        }
-
-        if (empty($template)) {
-            Mage::getModel('adminhtml/session')->addError($this->__('No transactional email specified'));
-            return $this->_redirect('adminhtml/emailtester/index');
-        }
-
-        if ($storeId < 1) {
-            Mage::getModel('adminhtml/session')->addError($this->__('You need to specify a specific Store View'));
-            return $this->_redirect('adminhtml/emailtester/index');
-        }
-
-        if (empty($orderId)) {
-            Mage::getModel('adminhtml/session')->addError($this->__('You need to specify a sales order'));
-            return $this->_redirect('adminhtml/emailtester/index');
+        if ($this->_preflightCheck() == false) {
+            $this->_redirect('adminhtml/emailtester/index');
+            return;
         }
 
         // Send the mail
-        $this->sendMail($template, $email, $storeId, $customerId, $productId, $orderId);
+        $this->sendMail();
 
         // Redirect
         $this->_redirect('adminhtml/emailtester/index');
+    }
+
+    /**
+     * Gather data from the request
+     */
+    protected function _gatherData()
+    {
+        $this->template = $this->getPostValue('template');
+        $this->email = $this->getPostValue('email');
+        $this->storeId = (int) $this->getPostValue('store');
+        $this->customerId = (int) $this->getPostValue('customer_id');
+        $this->productId = (int) $this->getPostValue('product_id');
+        $this->orderId = (int) $this->getPostValue('order_id');
+
+        if (Mage::app()->isSingleStoreMode()) {
+            $this->storeId = Mage::app()->getStore(true)->getId();
+        }
+
+    }
+
+    /**
+     * Pre-flight check when testing an email
+     *
+     * @return bool
+     */
+    protected function _preflightCheck()
+    {
+        if (empty($this->template)) {
+            Mage::getModel('adminhtml/session')->addError($this->__('No transactional email specified'));
+            return false;
+        }
+
+        if ($this->storeId < 1) {
+            Mage::getModel('adminhtml/session')->addError($this->__('You need to specify a specific Store View'));
+            return false;
+        }
+
+        if (empty($this->orderId)) {
+            Mage::getModel('adminhtml/session')->addError($this->__('You need to specify a sales order'));
+            return false;
+        }
+
+        return true;
     }
 }

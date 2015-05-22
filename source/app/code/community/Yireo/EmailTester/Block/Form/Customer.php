@@ -19,9 +19,15 @@ class Yireo_EmailTester_Block_Form_Customer extends Yireo_EmailTester_Block_Form
         $this->setTemplate('emailtester/form/customer.phtml');
 
         $customerId = $this->getRequest()->getParam('customer_id', 0);
-        $this->setCustomer(Mage::getModel('customer/customer')->load($customerId));
+        $customer = Mage::getModel('customer/customer')->load($customerId);
+        $this->setData('customer', $customer);
     }
-    
+
+    /**
+     * Get the current customer ID
+     *
+     * @return int
+     */
     public function getCustomerId()
     {
         $userData = Mage::getSingleton('adminhtml/session')->getData();
@@ -32,6 +38,11 @@ class Yireo_EmailTester_Block_Form_Customer extends Yireo_EmailTester_Block_Form
         return $currentValue;
     }
 
+    /**
+     * Get an array of customer select options
+     *
+     * @return array
+     */
     public function getCustomerOptions()
     {
         $options = array();
@@ -39,12 +50,15 @@ class Yireo_EmailTester_Block_Form_Customer extends Yireo_EmailTester_Block_Form
         $currentValue = $this->getCustomerId();
         $limit = Mage::getStoreConfig('emailtester/settings/limit_customer');
 
+        /* @var Mage_Customer_Model_Resource_Customer_Collection $customers */
         $customers = Mage::getModel('customer/customer')->getCollection()
             ->addAttributeToSelect('*')
             ->setOrder('entity_id', 'DESC')
         ;
 
-        if($limit > 0) $customers->setPage(0, $limit);
+        if($limit > 0) {
+            $customers->setPage(0, $limit);
+        }
 
         $storeId = $this->getStoreId();
         if($storeId > 0) {
@@ -59,8 +73,9 @@ class Yireo_EmailTester_Block_Form_Customer extends Yireo_EmailTester_Block_Form
         }
 
         foreach($customers as $customer) {
+            /* @var Mage_Customer_Model_Customer $customer */
             $value = $customer->getId();
-            $label = '['.$customer->getId().'] '.$customer->getFirstname().' '.$customer->getLastname().' ('.$customer->getEmail().')';
+            $label = '['.$customer->getId().'] '.$this->helper->getCustomerOutput($customer);
             $current = ($customer->getId() == $currentValue) ? true : false;
             $options[] = array('value' => $value, 'label' => $label, 'current' => $current);
         }
@@ -68,12 +83,18 @@ class Yireo_EmailTester_Block_Form_Customer extends Yireo_EmailTester_Block_Form
         return $options;
     }
 
+    /**
+     * Get current customer result
+     *
+     * @return string
+     */
     public function getCustomerSearch()
     {
-        $customerId = $this->getCustomerId(); 
+        $customerId = $this->getCustomerId();
+
         if(!empty($customerId)) {
             $customer = Mage::getModel('customer/customer')->load($customerId);
-            return Mage::helper('emailtester')->getCustomerOutput($customer);
+            return $this->helper->getCustomerOutput($customer);
         }
     }
 }

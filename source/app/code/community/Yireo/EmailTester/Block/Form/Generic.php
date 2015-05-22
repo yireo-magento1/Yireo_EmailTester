@@ -17,19 +17,15 @@ class Yireo_EmailTester_Block_Form_Generic extends Mage_Adminhtml_Block_Widget_C
     public function _construct()
     {
         parent::_construct();
+
         $this->setTemplate('emailtester/form/generic.phtml');
     }
-    
+
     /**
-     * Render block HTML
+     * Get all email template options
      *
-     * @return string
+     * @return array
      */
-    protected function _toHtml()
-    {
-        return parent::_toHtml();
-    }
-    
     public function getTemplateOptions()
     {
         $options = array();
@@ -60,6 +56,11 @@ class Yireo_EmailTester_Block_Form_Generic extends Mage_Adminhtml_Block_Widget_C
         return $options;
     }
 
+    /**
+     * Get the currently selected email template
+     *
+     * @return string
+     */
     public function getCurrentTemplate()
     {
         $userData = Mage::getSingleton('adminhtml/session')->getData();
@@ -69,7 +70,12 @@ class Yireo_EmailTester_Block_Form_Generic extends Mage_Adminhtml_Block_Widget_C
         }
         return $currentValue;
     }
-    
+
+    /**
+     * Get the current emailaddress
+     *
+     * @return string
+     */
     public function getCurrentEmail()
     {
         $email = Mage::getSingleton('adminhtml/session')->getData('emailtester.email');

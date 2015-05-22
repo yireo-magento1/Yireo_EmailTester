@@ -8,8 +8,28 @@
  * @license     Open Source License
  */
 
+/**
+ * Class Yireo_EmailTester_Block_Form_Abstract
+ */
 class Yireo_EmailTester_Block_Form_Abstract extends Mage_Adminhtml_Block_Widget_Container
 {
+    /**
+     * Constructor
+     */
+    protected function _construct()
+    {
+        parent::_construct();
+
+        $this->helper = Mage::helper('emailtester');
+    }
+
+    /**
+     * Get an array of all options defined in the extension settings
+     *
+     * @param null $type
+     *
+     * @return array|bool
+     */
     public function getCustomOptions($type = null)
     {
         $customOptions = Mage::getStoreConfig('emailtester/settings/custom_' . $type);
@@ -29,6 +49,12 @@ class Yireo_EmailTester_Block_Form_Abstract extends Mage_Adminhtml_Block_Widget_
         return $options;
     }
 
+    /**
+     * Get the current store
+     *
+     * @return int|mixed
+     * @throws Exception
+     */
     public function getStoreId()
     {
         $storeId = (int) $this->getRequest()->getParam('store');
