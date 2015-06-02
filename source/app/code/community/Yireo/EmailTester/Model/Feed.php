@@ -17,7 +17,7 @@ class Yireo_EmailTester_Model_Feed extends Mage_AdminNotification_Model_Feed
     /**
      * Return the feed URL
      */
-    protected $customFeedUrl = 'www.yireo.com/extfeed?format=feed&platform=magento&extension=emailtester';
+    protected $customFeedUrl = 'https://www.yireo.com/extfeed?format=feed&platform=magento&extension=emailtester';
 
     /**
      * Return the feed URL
@@ -26,7 +26,7 @@ class Yireo_EmailTester_Model_Feed extends Mage_AdminNotification_Model_Feed
      */
     public function getFeedUrl() 
     {
-        return Mage::getStoreConfigFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://'.$this->customFeedUrl;
+        return $this->customFeedUrl;
     }
 
     /**
