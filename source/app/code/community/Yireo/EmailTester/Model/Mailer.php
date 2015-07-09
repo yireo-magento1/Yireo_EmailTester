@@ -230,11 +230,14 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
             $creditmemo = null;
         }
 
+        $quote = Mage::getModel('sales/order_quote')->load($order->getQuoteId());
+
         $variables = array(
             'store' => $store,
             'customer' => $customer,
             'product' => $product,
             'order' => $order,
+            'quote' => $quote,
             'shipment' => $shipment,
             'invoice' => $invoice,
             'creditmemo' => $creditmemo,
