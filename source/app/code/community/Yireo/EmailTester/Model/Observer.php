@@ -9,7 +9,7 @@
  * @link http://www.yireo.com
  */
 
-/*
+/**
  * EmailTester observer to various Magento events
  */
 class Yireo_EmailTester_Model_Observer extends Mage_Core_Model_Abstract
@@ -42,7 +42,7 @@ class Yireo_EmailTester_Model_Observer extends Mage_Core_Model_Abstract
         return $this;
     }
 
-    /*
+    /**
      * Method fired on the event <controller_action_predispatch>
      *
      * @param Varien_Event_Observer $observer

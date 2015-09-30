@@ -10,7 +10,7 @@
 
 class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
 {
-    /*
+    /**
      * Constructor method
      */
     public function _construct()
@@ -95,7 +95,7 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
      */
     protected function _toHtml()
     {
-        /* @var Mage_Adminhtml_Block_Widget_Accordion $accordion */
+        /** @var Mage_Adminhtml_Block_Widget_Accordion $accordion */
         $accordion = $this->getLayout()->createBlock('adminhtml/widget_accordion')->setId('emailtester');
 
         $accordion->addItem('generic', array(
@@ -124,7 +124,7 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
 
         $this->setChild('accordion', $accordion);
 
-        /* @var Mage_Adminhtml_Block_Widget_Button $outputButton */
+        /** @var Mage_Adminhtml_Block_Widget_Button $outputButton */
         $outputButton =  $this->getLayout()->createBlock('adminhtml/widget_button')
                  ->setData(array(
                      'label' => Mage::helper('emailtester')->__('Print Email'),
@@ -133,7 +133,7 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
                  ));
         $this->setChild('output_button', $outputButton);
 
-        /* @var Mage_Adminhtml_Block_Widget_Button $sendButton */
+        /** @var Mage_Adminhtml_Block_Widget_Button $sendButton */
         $sendButton = $this->getLayout()->createBlock('adminhtml/widget_button')
                  ->setData(array(
                      'label' => Mage::helper('emailtester')->__('Send Email'),
@@ -142,7 +142,7 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
                  ));
         $this->setChild('send_button', $sendButton);
 
-        /* @var Yireo_EmailTester_Block_Form_Check $checkBlock */
+        /** @var Yireo_EmailTester_Block_Form_Check $checkBlock */
         $checkBlock = $this->getLayout()->createBlock('emailtester/form_check')->setId('check');
         $this->setChild('check', $checkBlock);
 
@@ -161,7 +161,7 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
     {
         $this->getRequest()->setParam('store', $this->getStore());
 
-        /* @var Mage_Adminhtml_Block_Store_Switcher $storeSwitcherBlock */
+        /** @var Mage_Adminhtml_Block_Store_Switcher $storeSwitcherBlock */
         $storeSwitcherBlock = $this->getLayout()->createBlock('adminhtml/store_switcher')
                       ->setUseConfirm(false)
                       ->setSwitchUrl($this->getUrl('*/*/*', array('store' => null)));

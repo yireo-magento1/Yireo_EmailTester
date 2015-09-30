@@ -26,7 +26,7 @@ class Yireo_EmailTester_Block_Form_Abstract extends Mage_Adminhtml_Block_Widget_
     /**
      * Get an array of all options defined in the extension settings
      *
-     * @param null $type
+     *  $type
      *
      * @return array|bool
      */

@@ -11,7 +11,7 @@
 
 class Yireo_EmailTester_Block_Form_Check extends Mage_Adminhtml_Block_Widget_Container
 {
-    /*
+    /**
      * Constructor method
      */
     public function _construct()

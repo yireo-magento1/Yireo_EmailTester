@@ -23,7 +23,7 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
      */
     protected function outputMail()
     {
-        /* @var Yireo_EmailTester_Model_Mailer $mailer */
+        /** @var Yireo_EmailTester_Model_Mailer $mailer */
         $mailer = Mage::getModel('emailtester/mailer');
         $mailer->setTemplate($this->template);
         $mailer->setEmail($this->email);
@@ -43,7 +43,7 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
      */
     protected function sendMail()
     {
-        /* @var Yireo_EmailTester_Model_Mailer $mailer */
+        /** @var Yireo_EmailTester_Model_Mailer $mailer */
         $mailer = Mage::getModel('emailtester/mailer');
         $mailer->setTemplate($this->template);
         $mailer->setEmail($this->email);

@@ -10,7 +10,7 @@
 
 class Yireo_EmailTester_Block_Form_Order extends Yireo_EmailTester_Block_Form_Abstract
 {
-    /*
+    /**
      * Constructor method
      */
     public function _construct()
@@ -52,7 +52,7 @@ class Yireo_EmailTester_Block_Form_Order extends Yireo_EmailTester_Block_Form_Ab
         $limit = Mage::getStoreConfig('emailtester/settings/limit_order');
         $currentValue = $this->getOrderId();
 
-        /* @var Mage_Sales_Model_Resource_Order_Collection $orders */
+        /** @var Mage_Sales_Model_Resource_Order_Collection $orders */
         $orders = Mage::getModel('sales/order')->getCollection()
             ->setOrder('increment_id', 'DESC')
         ;
@@ -78,7 +78,7 @@ class Yireo_EmailTester_Block_Form_Order extends Yireo_EmailTester_Block_Form_Ab
         }
 
         foreach($orders as $order) {
-            /* @var Mage_Sales_Model_Order $order */
+            /** @var Mage_Sales_Model_Order $order */
             $value = $order->getId();
             $label = '['.$order->getId().'] '.$this->helper->getOrderOutput($order);
             $current = ($order->getId() == $currentValue) ? true : false;

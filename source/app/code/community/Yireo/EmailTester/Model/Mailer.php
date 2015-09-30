@@ -41,7 +41,7 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
             header('Content-Type: text/html; charset=UTF-8');
         }
 
-        $body = $mail->getProcessedTemplate($variables, true);
+        $body = $mail->getProcessedTemplate($variables);
         $fixHeader = (bool)Mage::getStoreConfig('emailtester/settings/fix_header');
 
         if(strstr($body, '<html') == false && $fixHeader == true) {
@@ -230,7 +230,7 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
             $creditmemo = null;
         }
 
-        $quote = Mage::getModel('sales/order_quote')->load($order->getQuoteId());
+        $quote = Mage::getModel('sales/quote')->load($order->getQuoteId());
 
         $variables = array(
             'store' => $store,
@@ -256,11 +256,9 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
 
     /**
      *
-     *
      * @param $order
      * @param $storeId
      *
-     * @return null
      */
     public function getPaymentBlockHtml($order, $storeId)
     {

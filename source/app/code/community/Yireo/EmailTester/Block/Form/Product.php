@@ -10,7 +10,7 @@
 
 class Yireo_EmailTester_Block_Form_Product extends Yireo_EmailTester_Block_Form_Abstract
 {
-    /*
+    /**
      * Constructor method
      */
     public function _construct()
@@ -53,7 +53,7 @@ class Yireo_EmailTester_Block_Form_Product extends Yireo_EmailTester_Block_Form_
         $currentValue = $this->getProductId();
         $limit = Mage::getStoreConfig('emailtester/settings/limit_product');
 
-        /* @var Mage_Catalog_Model_Resource_Product_Collection $products */
+        /** @var Mage_Catalog_Model_Resource_Product_Collection $products */
         $products = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToSelect('*')
             ->setOrder('entity_id', 'DESC')
@@ -69,7 +69,7 @@ class Yireo_EmailTester_Block_Form_Product extends Yireo_EmailTester_Block_Form_
         }
 
         foreach($products as $product) {
-            /* @var Mage_Catalog_Model_Product $product */
+            /** @var Mage_Catalog_Model_Product $product */
             $value = $product->getId();
             $label = '['.$product->getId().'] '.$this->helper->getProductOutput($product);
             $current = ($product->getId() == $currentValue) ? true : false;

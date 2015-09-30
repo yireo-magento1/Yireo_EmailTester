@@ -10,12 +10,9 @@
 
 class Yireo_EmailTester_Block_Print extends Mage_Adminhtml_Block_Widget_Container
 {
-    /*
+    /**
      * Constructor method
      *
-     * @access public
-     * @param null
-     * @return null
      */
     public function _construct()
     {

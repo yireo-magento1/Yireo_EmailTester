@@ -88,9 +88,6 @@ class Yireo_EmailTester_EmailtesterController extends Yireo_EmailTester_Controll
     /**
      * Send an mail
      *
-     * @access public
-     * @param null
-     * @return null
      */
     public function mailAction()
     {
@@ -149,5 +146,12 @@ class Yireo_EmailTester_EmailtesterController extends Yireo_EmailTester_Controll
         }
 
         return true;
+    }
+
+    protected function _isAllowed()
+    {
+        $aclResource = 'admin/system/tools/emailtester';
+
+        return Mage::getSingleton('admin/session')->isAllowed($aclResource);
     }
 }

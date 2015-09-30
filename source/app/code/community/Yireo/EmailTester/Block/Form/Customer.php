@@ -10,7 +10,7 @@
 
 class Yireo_EmailTester_Block_Form_Customer extends Yireo_EmailTester_Block_Form_Abstract
 {
-    /*
+    /**
      * Constructor method
      */
     public function _construct()
@@ -50,7 +50,7 @@ class Yireo_EmailTester_Block_Form_Customer extends Yireo_EmailTester_Block_Form
         $currentValue = $this->getCustomerId();
         $limit = Mage::getStoreConfig('emailtester/settings/limit_customer');
 
-        /* @var Mage_Customer_Model_Resource_Customer_Collection $customers */
+        /** @var Mage_Customer_Model_Resource_Customer_Collection $customers */
         $customers = Mage::getModel('customer/customer')->getCollection()
             ->addAttributeToSelect('*')
             ->setOrder('entity_id', 'DESC')
@@ -73,7 +73,7 @@ class Yireo_EmailTester_Block_Form_Customer extends Yireo_EmailTester_Block_Form
         }
 
         foreach($customers as $customer) {
-            /* @var Mage_Customer_Model_Customer $customer */
+            /** @var Mage_Customer_Model_Customer $customer */
             $value = $customer->getId();
             $label = '['.$customer->getId().'] '.$this->helper->getCustomerOutput($customer);
             $current = ($customer->getId() == $currentValue) ? true : false;
