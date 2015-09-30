@@ -1,0 +1,8 @@
+# Modman file
+source/app/etc/modules/Yireo_EmailTester.xml                        app/etc/modules/Yireo_EmailTester.xml
+source/app/code/community/Yireo/EmailTester                         app/code/community/Yireo/EmailTester
+source/app/design/adminhtml/default/default/layout/emailtester.xml  app/design/adminhtml/default/default/layout/emailtester.xml
+source/app/design/adminhtml/default/default/templates/emailtester   app/design/adminhtml/default/default/templates/emailtester
+source/skin/adminhtml/default/default/css/emailtester               skin/adminhtml/default/default/css/emailtester
+source/skin/adminhtml/default/default/js/emailtester                skin/adminhtml/default/default/js/emailtester
+source/skin/adminhtml/default/default/images/emailtester            skin/adminhtml/default/default/images/emailtester
