@@ -247,7 +247,9 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
         );
 
         // Allow for other extensions to add their own variables as well
-        Mage::dispatchEvent('emailtester_variables', array('variables' => &$variables));
+        $result = new Varien_Object($variables);
+        Mage::dispatchEvent('emailtester_variables', array('variables' => &$variables, 'result' => $result));
+        $variables = $result->getData();
 
         $appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
         
