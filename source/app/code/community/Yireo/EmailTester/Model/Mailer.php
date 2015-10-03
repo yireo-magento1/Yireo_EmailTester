@@ -244,6 +244,7 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
             'billing' => $customer->getPrimaryBillingAddress(),
             'comment' => 'This is a sample comment inserted by Yireo_EmailTester.',
             'payment_html' => $paymentBlockHtml,
+            'email_template' => $this->getTemplate(),
         );
 
         // Allow for other extensions to add their own variables as well
