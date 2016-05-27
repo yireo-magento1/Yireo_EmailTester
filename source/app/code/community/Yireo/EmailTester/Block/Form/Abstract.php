@@ -3,8 +3,8 @@
  * Yireo EmailTester for Magento
  *
  * @package     Yireo_EmailTester
- * @author      Yireo (http://www.yireo.com/)
- * @copyright   Copyright 2015 Yireo (http://www.yireo.com/)
+ * @author      Yireo (https://www.yireo.com/)
+ * @copyright   Copyright 2015 Yireo (https://www.yireo.com/)
  * @license     Open Source License
  */
 
@@ -13,6 +13,21 @@
  */
 class Yireo_EmailTester_Block_Form_Abstract extends Mage_Adminhtml_Block_Widget_Container
 {
+    /** @var Mage_Adminhtml_Model_Session */
+    protected $session;
+
+    /** @var Mage_Core_Model_App */
+    protected $app;
+    
+    /** @var Mage_Core_Model_Store */
+    protected $store;
+
+    /** @var Yireo_EmailTester_Helper_Data */
+    protected $helper;
+
+    /** @var Yireo_EmailTester_Helper_Output */
+    protected $outputHelper;
+
     /**
      * Constructor
      */
@@ -20,48 +35,18 @@ class Yireo_EmailTester_Block_Form_Abstract extends Mage_Adminhtml_Block_Widget_
     {
         parent::_construct();
 
+        $this->app = Mage::app();
         $this->helper = Mage::helper('emailtester');
+        $this->outputHelper = Mage::helper('emailtester/output');
+        $this->session = Mage::getSingleton('admin/session');
+        $this->store = Mage::getModel('core/store');
     }
 
     /**
-     * Get an array of all options defined in the extension settings
-     *
-     *  $type
-     *
-     * @return array|bool
+     * @return Yireo_EmailTester_Helper_Data
      */
-    public function getCustomOptions($type = null)
+    public function getHelper()
     {
-        $customOptions = Mage::getStoreConfig('emailtester/settings/custom_' . $type);
-        if (empty($customOptions)) {
-            return false;
-        }
-
-        $options = array();
-        $customOptions = explode(',', $customOptions);
-        foreach ($customOptions as $customOption) {
-            $customOption = (int) trim($customOption);
-            if ($customOption > 0) {
-                $options[] = $customOption;
-            }
-        }
-
-        return $options;
-    }
-
-    /**
-     * Get the current store
-     *
-     * @return int|mixed
-     * @throws Exception
-     */
-    public function getStoreId()
-    {
-        $storeId = (int) $this->getRequest()->getParam('store');
-        if (!$storeId > 0) {
-            $storeId = Mage::getSingleton('adminhtml/session')->getData('emailtester.store');
-        }
-
-        return $storeId;
+        return $this->helper;
     }
 }

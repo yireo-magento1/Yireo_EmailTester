@@ -3,13 +3,21 @@
  * Yireo EmailTester for Magento 
  *
  * @package     Yireo_EmailTester
- * @author      Yireo (http://www.yireo.com/)
- * @copyright   Copyright 2015 Yireo (http://www.yireo.com/)
+ * @author      Yireo (https://www.yireo.com/)
+ * @copyright   Copyright 2015 Yireo (https://www.yireo.com/)
  * @license     Open Source License
  */
 
+/**
+ * Class Yireo_EmailTester_Block_Form_Product
+ */
 class Yireo_EmailTester_Block_Form_Product extends Yireo_EmailTester_Block_Form_Abstract
 {
+    /**
+     * @var Yireo_EmailTester_Model_Data_Product
+     */
+    protected $productData;
+    
     /**
      * Constructor method
      */
@@ -19,9 +27,7 @@ class Yireo_EmailTester_Block_Form_Product extends Yireo_EmailTester_Block_Form_
 
         $this->setTemplate('emailtester/form/product.phtml');
 
-        $productId = $this->getRequest()->getParam('product_id', 0);
-        $product = Mage::getModel('catalog/product')->load($productId);
-        $this->setData('product', $product);
+        $this->productData = Mage::getModel('emailtester/data_product');
     }
 
     /**
@@ -31,14 +37,7 @@ class Yireo_EmailTester_Block_Form_Product extends Yireo_EmailTester_Block_Form_
      */
     public function getProductId()
     {
-        $userData = Mage::getSingleton('adminhtml/session')->getData();
-        $currentValue = (isset($userData['emailtester.product_id'])) ? (int)$userData['emailtester.product_id'] : null;
-
-        if(empty($currentValue)) {
-            $currentValue = Mage::getStoreConfig('emailtester/settings/default_product');
-        }
-
-        return $currentValue;
+        return $this->productData->getProductId();
     }
 
     /**
@@ -48,35 +47,7 @@ class Yireo_EmailTester_Block_Form_Product extends Yireo_EmailTester_Block_Form_
      */
     public function getProductOptions()
     {
-        $options = array();
-        $options[] = array('value' => '', 'label' => '', 'current' => null);
-        $currentValue = $this->getProductId();
-        $limit = Mage::getStoreConfig('emailtester/settings/limit_product');
-
-        /** @var Mage_Catalog_Model_Resource_Product_Collection $products */
-        $products = Mage::getModel('catalog/product')->getCollection()
-            ->addAttributeToSelect('*')
-            ->setOrder('entity_id', 'DESC')
-        ;
-
-        if($limit > 0) {
-            $products->setPage(0, $limit);
-        }
-
-        $customOptions = $this->getCustomOptions('product');
-        if(!empty($customOptions)) {
-            $products->addAttributeToFilter('entity_id', array('in' => $customOptions));
-        }
-
-        foreach($products as $product) {
-            /** @var Mage_Catalog_Model_Product $product */
-            $value = $product->getId();
-            $label = '['.$product->getId().'] '.$this->helper->getProductOutput($product);
-            $current = ($product->getId() == $currentValue) ? true : false;
-            $options[] = array('value' => $value, 'label' => $label, 'current' => $current);
-        }
-
-        return $options;
+        return $this->productData->getProductOptions();
     }
 
     /**
@@ -86,11 +57,7 @@ class Yireo_EmailTester_Block_Form_Product extends Yireo_EmailTester_Block_Form_
      */
     public function getProductSearch()
     {
-        $productId = $this->getProductId(); 
-        if(!empty($productId)) {
-            $product = Mage::getModel('catalog/product')->load($productId);
-            return $this->helper->getProductOutput($product);
-        }
+        return $this->productData->getProductSearch();
     }
 
     /**

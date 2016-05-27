@@ -51,7 +51,7 @@ trait Yireo_EmailTester_Trait_Errorable
      */
     public function getErrorString($delimiter = '')
     {
-        return implode(',', $this->errors);
+        return implode('; ', $this->errors);
     }
 
     /**

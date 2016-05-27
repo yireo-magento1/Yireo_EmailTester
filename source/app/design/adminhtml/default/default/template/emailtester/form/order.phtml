@@ -8,22 +8,26 @@
  * @license     Open Source License
  */
 
+/**
+ * @var $this Yireo_EmailTester_Block_Form_Order 
+ */
+$helper = $this->getHelper();
 ?>
 <div class="fieldset">
 <table cellspacing="0" class="form-list">
     <tbody>
         <tr class="headings">
             <td width="100" class="label">
-                <label for="order_id"><?php echo Mage::helper('emailtester')->__('Order')?></label>
+                <label for="order_id"><?php echo $helper->__('Order')?></label>
             </td>
             <td width="80" class="value">
-                <?php $help = Mage::helper('emailtester')->__('Type in the numerical ID of the order, or use the search on the right.'); ?>
+                <?php $help = $helper->__('Type in the numerical ID of the order, or use the search on the right.'); ?>
                 <input name="order_id" id="order_id" class="input-text required-entry" style="width:50px;" 
                     value="<?php echo $this->getOrderId(); ?>" placeholder="<?php echo $this->__('ID'); ?>" title="<?php echo $help; ?>" />
             </td>
             <td class="value">
-                <?php $placeholder = Mage::helper('emailtester')->__('Start typing to search for an order'); ?>
-                <?php $help = Mage::helper('emailtester')->__('Start typing to search for an order. A dropdown will show you results automatically.'); ?>
+                <?php $placeholder = $helper->__('Start typing to search for an order'); ?>
+                <?php $help = $helper->__('Start typing to search for an order. A dropdown will show you results automatically.'); ?>
                 <input name="order_search" id="order_search" class="input-text" style="width:300px"
                     value="<?php echo $this->getOrderSearch(); ?>" placeholder="<?php echo $placeholder; ?>" title="<?php echo $help; ?>" />
 

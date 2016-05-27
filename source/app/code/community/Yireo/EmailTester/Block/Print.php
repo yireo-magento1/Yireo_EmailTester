@@ -3,20 +3,23 @@
  * Yireo EmailTester for Magento
  *
  * @package     Yireo_EmailTester
- * @author      Yireo (http://www.yireo.com/)
- * @copyright   Copyright 2015 Yireo (http://www.yireo.com/)
+ * @author      Yireo (https://www.yireo.com/)
+ * @copyright   Copyright 2015 Yireo (https://www.yireo.com/)
  * @license     Open Source License (OSL v3)
  */
 
+/**
+ * Class Yireo_EmailTester_Block_Print
+ */
 class Yireo_EmailTester_Block_Print extends Mage_Adminhtml_Block_Widget_Container
 {
     /**
      * Constructor method
-     *
      */
     public function _construct()
     {
-        $this->setTemplate('emailtester/print.phtml');
         parent::_construct();
+
+        $this->setTemplate('emailtester/print.phtml');
     }
 }

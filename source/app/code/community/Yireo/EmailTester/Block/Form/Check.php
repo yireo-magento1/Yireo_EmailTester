@@ -3,13 +3,13 @@
  * Yireo EmailTester for Magento 
  *
  * @package     Yireo_EmailTester
- * @author      Yireo (http://www.yireo.com/)
- * @copyright   Copyright 2015 Yireo (http://www.yireo.com/)
+ * @author      Yireo (https://www.yireo.com/)
+ * @copyright   Copyright 2015 Yireo (https://www.yireo.com/)
  * @license     Open Source License
  * @contributor Philipp Wiegel
  */
 
-class Yireo_EmailTester_Block_Form_Check extends Mage_Adminhtml_Block_Widget_Container
+class Yireo_EmailTester_Block_Form_Check extends Yireo_EmailTester_Block_Form_Abstract
 {
     /**
      * Constructor method
@@ -17,9 +17,13 @@ class Yireo_EmailTester_Block_Form_Check extends Mage_Adminhtml_Block_Widget_Con
     public function _construct()
     {
         parent::_construct();
+        
         $this->setTemplate('emailtester/form/checks.phtml');
     }
-    
+
+    /**
+     * @return array
+     */
     public function getWarnings()
     {
         $warnings = array();

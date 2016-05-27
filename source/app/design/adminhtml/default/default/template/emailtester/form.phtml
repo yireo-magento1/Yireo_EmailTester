@@ -1,6 +1,6 @@
 <?php
 /**
- * EmailTester extension for Magento 
+ * EmailTester extension for Magento
  *
  * @package     Yireo_EmailTester
  * @author      Yireo (http://www.yireo.com/)
@@ -8,80 +8,57 @@
  * @license     Open Software License
  */
 
+/**
+ * @var $this Yireo_EmailTester_Block_Form
+ */
 ?>
 
-<div class="content-header">
-<table cellspacing="0">
-	<tr>
-		<td style="width:80%;"><h3 class="icon-head head-tag"><?php echo $this->__('Email Tester'); ?></h3></td>
-        <td class="formbuttons" style="float:right">
-            <?php echo $this->getChildHtml('send_button'); ?>
-            <?php echo $this->getChildHtml('output_button'); ?>
-        </td>
-	</tr>
-</table>
-</div>
+<div class="emailtester-container">
+    <div class="content-header">
+        <table cellspacing="0">
+            <tr>
+                <td class="left-col"><h3 class="icon-head head-tag"><?php echo $this->__('Email Tester'); ?></h3></td>
+                <td class="formbuttons">
+                    <?php echo $this->getChildHtml('send_button'); ?>
+                    <?php echo $this->getChildHtml('output_button'); ?>
+                </td>
+            </tr>
+        </table>
+    </div>
 
-<?php echo $this->getChildHtml('store_switcher'); ?>
+    <?php echo $this->getChildHtml('store_switcher'); ?>
 
-<div id="alert_messages_block"><?php echo $this->getMessageHtml() ?></div>
+    <div id="alert_messages_block"><?php echo $this->getMessageHtml() ?></div>
 
-<div class="entry-edit">
-    <form action="<?php echo $this->getSendUrl() ?>" method="post" id="emailtester_form">
-    <?php echo $this->getChildHtml('accordion') ?>
-    <?php echo $this->getBlockHtml('formkey')?>
-    <input type="hidden" name="store" value="<?php echo $this->getStore(); ?>" />
-    </form>
-</div>
-    
-<?php echo $this->getChildHtml('check') ?>
+    <div class="entry-edit">
+        <form action="<?php echo $this->getSendUrl() ?>" method="post" id="emailtester_form">
+            <?php echo $this->getChildHtml('accordion') ?>
+            <?php echo $this->getBlockHtml('formkey') ?>
+            <input type="hidden" name="store" value="<?php echo $this->getStore(); ?>"/>
+        </form>
+    </div>
 
-<div style="text-align:center;">
-<div style="font-size:90%; color:#575757; padding-top:20px;">
-        EmailTester <?php echo $this->getVersion(); ?> &nbsp; - &nbsp;
-        <?php echo $this->__('Copyright'); ?> &copy; 2014 <a href="http://www.yireo.com/" target="_new">Yireo</a>
-        <img src="<?php echo $this->getSkinUrl('images/emailtester/yireo.png'); ?>" style="display:inline;padding-left:5px" />
-</div>
+    <?php echo $this->getChildHtml('check') ?>
+
+    <div class="version">
+        <div class="inner">
+            EmailTester <?php echo $this->getVersion(); ?> &nbsp; - &nbsp;
+            <?php echo $this->__('Copyright'); ?> &copy; 2014 <a href="http://www.yireo.com/" target="_new">Yireo</a>
+            <img src="<?php echo $this->getSkinUrl('images/emailtester/yireo.png'); ?>"
+                 style="display:inline;padding-left:5px"/>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
-jQuery(function() {
-    var tooltips = jQuery('[title]').tooltip({
-      position: {
-        my: "left top",
-        at: "right+5 top-5"
-      }
+    jQuery(function () {
+        var tooltips = jQuery('[title]').tooltip({
+            position: {
+                my: "left top",
+                at: "right+5 top-5"
+            }
+        });
     });
-  });
 
-var emailtesterForm = new varienForm('emailtester_form');
-function emailtesterPrepareForm() {
-    if($$('[name="store"]')[0].value < 1) {
-        $$('[name="store"]')[0].value = <?php echo (int)$this->getDefaultStoreId(); ?>;
-    }
-    return true;
-}
-function emailtesterEmail() {
-    if(emailtesterPrepareForm() == true) {
-        $('emailtester_form').writeAttribute('target', '_self');
-        emailtesterForm.submit('<?php echo $this->getSendUrl(); ?>');
-        return true;
-    }
-    return false;
-}
-function emailtesterPrint() {
-    if(emailtesterPrepareForm() == true) {
-        $('emailtester_form').writeAttribute('target', '_blank');
-        emailtesterForm.submit('<?php echo $this->getOutputUrl(); ?>');
-        return true;
-    }
-    return false;
-}
-
-function clearInput(id1, id2, id3) {
-    jQuery('#' + id1).val('');
-    jQuery('#' + id2).val('');
-    jQuery('#' + id3).val('');
-    return false;
-}
+    var emailtesterForm = new varienForm('emailtester_form');
 </script>

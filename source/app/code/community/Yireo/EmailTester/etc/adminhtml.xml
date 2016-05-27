@@ -4,24 +4,14 @@
  * Yireo EmailTester for Magento 
  *
  * @package     Yireo_EmailTester
- * @author      Yireo (http://www.yireo.com/)
- * @copyright   Copyright 2015 Yireo (http://www.yireo.com/)
+ * @author      Yireo (https://www.yireo.com/)
+ * @copyright   Copyright 2015 Yireo (https://www.yireo.com/)
  * @license     Open Source License (OSL v3)
  */
 -->
 <config>
-    <translate>
-        <modules>
-            <Yireo_EmailTester>
-                <files>
-                    <default>Yireo_EmailTester.csv</default>
-                </files>
-            </Yireo_EmailTester>
-        </modules>
-    </translate>
-
     <menu>
-         <system>
+        <system>
             <children>
                 <tools>
                     <children>
@@ -32,16 +22,8 @@
                     </children>
                 </tools>
             </children>
-         </system>
+        </system>
     </menu>
-
-    <layout>
-        <updates>
-            <emailtester>
-                <file>emailtester.xml</file>
-            </emailtester>
-        </updates>
-    </layout>
 
     <acl>
         <resources>
@@ -52,7 +34,7 @@
                             <tools>
                                 <children>
                                     <emailtester>
-                                        <title>Email Tester</title>
+                                        <title>Yireo_EmailTester GUI</title>
                                     </emailtester>
                                 </children>
                             </tools>
@@ -69,16 +51,4 @@
             </admin>
         </resources>
     </acl>
-
-    <events>
-        <controller_action_predispatch>
-            <observers>
-                <emailtester_controller_action_predispatch>
-                    <type>singleton</type>
-                    <class>Yireo_EmailTester_Model_Observer</class>
-                    <method>controllerActionPredispatch</method>
-                </emailtester_controller_action_predispatch>
-            </observers>
-        </controller_action_predispatch>
-    </events>
 </config>

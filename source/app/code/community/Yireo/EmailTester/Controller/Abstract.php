@@ -3,8 +3,8 @@
  * Yireo EmailTester for Magento
  *
  * @package     Yireo_EmailTester
- * @author      Yireo (http://www.yireo.com/)
- * @copyright   Copyright 2015 Yireo (http://www.yireo.com/)
+ * @author      Yireo (https://www.yireo.com/)
+ * @copyright   Copyright 2015 Yireo (https://www.yireo.com/)
  * @license     Open Source License (OSL v3)
  */
 
@@ -17,49 +17,61 @@
 class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Action
 {
     /**
-     * Output the email in the browser
-     *
-     * @return void
+     * Include the behaviour of handling errors
      */
-    protected function outputMail()
-    {
-        /** @var Yireo_EmailTester_Model_Mailer $mailer */
-        $mailer = Mage::getModel('emailtester/mailer');
-        $mailer->setTemplate($this->template);
-        $mailer->setEmail($this->email);
-        $mailer->setStoreId($this->storeId);
-        $mailer->setOrderId($this->orderId);
-        $mailer->setProductId($this->productId);
-        $mailer->setCustomerId($this->customerId);
+    use Yireo_EmailTester_Trait_Datacontainable;
+    
+    /**
+     * @var Mage_Adminhtml_Helper_Data
+     */
+    protected $adminhtmlHelper;
 
-        // Print the mail
-        $mailer->doPrint();
+    /**
+     * @var Yireo_EmailTester_Helper_Data
+     */
+    protected $helper;
+
+    /**
+     * @var Yireo_EmailTester_Helper_Output
+     */
+    protected $outputHelper;
+
+    /**
+     * @var Yireo_EmailTester_Model_Mailer
+     */
+    protected $mailer;
+
+    /**
+     * Pre dispatch action
+     */
+    public function preDispatch()
+    {
+        $this->adminhtmlHelper = Mage::helper('adminhtml');
+        $this->helper = Mage::helper('emailtester');
+        $this->outputHelper = Mage::helper('emailtester/output');
+        $this->mailer = Mage::getModel('emailtester/mailer');
+
+        return parent::preDispatch();
     }
 
     /**
-     * Send the email to a recipient
+     * Note: Do not move this to preDispatch() or constructor, because it will break
      *
-     * @return bool
+     * @return Mage_Admin_Model_Session
      */
-    protected function sendMail()
+    protected function getSession()
     {
-        /** @var Yireo_EmailTester_Model_Mailer $mailer */
-        $mailer = Mage::getModel('emailtester/mailer');
-        $mailer->setTemplate($this->template);
-        $mailer->setEmail($this->email);
-        $mailer->setStoreId($this->storeId);
-        $mailer->setOrderId($this->orderId);
-        $mailer->setProductId($this->productId);
-        $mailer->setCustomerId($this->customerId);
+        return Mage::getSingleton('admin/session');
+    }
 
-        // Send the mail
-        if ($mailer->send() == true) {
-            Mage::getModel('adminhtml/session')->addSuccess($this->__('Mail sent to %s', $mailer->getEmail()));
-            return true;
-        } else {
-            Mage::getModel('adminhtml/session')->addError($this->__('Error sending mail: %s', $mailer->getError()));
-            return false;
-        }
+    /**
+     * Note: Do not move this to preDispatch() or constructor, because it will break
+     *
+     * @return Mage_Admin_Model_Session
+     */
+    protected function getAdminhtmlSession()
+    {
+        return Mage::getSingleton('adminhtml/session');
     }
 
     /**
@@ -71,14 +83,21 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
      */
     protected function getPostValue($name)
     {
+        if (empty($name)) {
+            $this->getAdminhtmlSession()->addError('Empty argument for getPostValue()');
+            return null;
+        }
+
         $value = $this->getRequest()->getParam($name);
+
         if (empty($value)) {
-            $value = Mage::getSingleton('adminhtml/session')->getData('emailtester.' . $name);
+            $value = $this->getSession()->getData('emailtester.' . $name);
         }
 
         if (!empty($value)) {
-            Mage::getSingleton('adminhtml/session')->setData('emailtester.' . $name, $value);
+            $this->getSession()->setData('emailtester.' . $name, $value);
         }
+
         return $value;
     }
 
@@ -104,10 +123,11 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
      * @param $search
      *
      * @return array
+     * @todo: Move to data models
      */
     protected function getCustomerData($search)
     {
-        $limit = Mage::getStoreConfig('emailtester/settings/limit_customer');
+        $limit = $this->helper->getStoreConfig('emailtester/settings/limit_customer');
         if ($limit > 100) {
             $limit = 100;
         }
@@ -120,8 +140,7 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
         $customers
             ->addAttributeToSelect(array('email', 'firstname', 'lastname'))
             ->setCurPage(0)
-            ->setPageSize($limit)
-        ;
+            ->setPageSize($limit);
 
         $customers->addAttributeToFilter(array(
             array('attribute' => 'firstname', 'like' => '%' . $search . '%'),
@@ -129,7 +148,7 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
             array('attribute' => 'email', 'like' => '%' . $search . '%'),
         ));
 
-        $storeId = Mage::getSingleton('adminhtml/session')->getData('emailtester.store');
+        $storeId = $this->getSession()->getData('emailtester.store');
         if ($storeId > 0) {
             $store = Mage::getModel('core/store')->load($storeId);
             $websiteId = $store->getWebsiteId();
@@ -140,22 +159,24 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
         foreach ($customers as $customer) {
             $data[] = array(
                 'id' => $customer->getId(),
-                'value' => Mage::helper('emailtester')->getCustomerOutput($customer),
+                'value' => $this->outputHelper->getCustomerOutput($customer),
             );
         }
 
         return $data;
     }
+
     /**
      * Return a search for product data
      *
      * @param $search
      *
      * @return array
+     * @todo: Move to data models
      */
     protected function getProductData($search)
     {
-        $limit = Mage::getStoreConfig('emailtester/settings/limit_product');
+        $limit = $this->helper->getStoreConfig('emailtester/settings/limit_product');
         if ($limit > 100) {
             $limit = 100;
         }
@@ -168,8 +189,7 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
             ->getCollection()
             ->addAttributeToSelect(array('sku', 'name', 'short_description'))
             ->setCurPage(0)
-            ->setPageSize($limit)
-        ;
+            ->setPageSize($limit);
 
         $products->addAttributeToFilter(array(
             array('attribute' => 'name', 'like' => '%' . $search . '%'),
@@ -180,7 +200,7 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
         foreach ($products as $product) {
             $data[] = array(
                 'id' => $product->getId(),
-                'value' => Mage::helper('emailtester')->getProductOutput($product),
+                'value' => $this->outputHelper->getProductOutput($product),
             );
         }
 
@@ -193,10 +213,11 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
      * @param $search
      *
      * @return array
+     * @todo: Move to data models
      */
     protected function getOrderData($search)
     {
-        $limit = Mage::getStoreConfig('emailtester/settings/limit_order');
+        $limit = $this->helper->getStoreConfig('emailtester/settings/limit_order');
         if ($limit > 100) {
             $limit = 100;
         }
@@ -209,10 +230,9 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
             ->getCollection()
             ->setCurPage(0)
             ->setPageSize($limit)
-            ->addFieldToSelect('*')
-        ;
+            ->addFieldToSelect('*');
 
-        $storeId = Mage::getSingleton('adminhtml/session')->getData('emailtester.store');
+        $storeId = $this->getSession()->getData('emailtester.store');
         if ($storeId > 0) {
             $orders->addFieldToFilter('store_id', $storeId);
         }
@@ -231,7 +251,7 @@ class Yireo_EmailTester_Controller_Abstract extends Mage_Adminhtml_Controller_Ac
         foreach ($orders as $order) {
             $data[] = array(
                 'id' => $order->getId(),
-                'value' => Mage::helper('emailtester')->getOrderOutput($order),
+                'value' => $this->outputHelper->getOrderOutput($order),
             );
         }
 

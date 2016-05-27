@@ -1,6 +1,6 @@
 <?php
 /**
- * EmailTester extension for Magento 
+ * EmailTester extension for Magento
  *
  * @package     Yireo_EmailTester
  * @author      Yireo (http://www.yireo.com/)
@@ -8,12 +8,15 @@
  * @license     Open Software License
  */
 
-@header('Content-type: text/html; charset=utf-8'); 
+/**
+ * @var $this Yireo_EmailTester_Block_Print
+ */
+@header('Content-type: text/html; charset=utf-8');
 ?>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 </head>
 <?php echo trim($this->getBody()); ?>
 </html>

@@ -3,8 +3,8 @@
  * Yireo EmailTester for Magento
  *
  * @package     Yireo_EmailTester
- * @author      Yireo (http://www.yireo.com/)
- * @copyright   Copyright 2015 Yireo (http://www.yireo.com/)
+ * @author      Yireo (https://www.yireo.com/)
+ * @copyright   Copyright 2015 Yireo (https://www.yireo.com/)
  * @license     Open Source License (OSL v3)
  */
 
@@ -30,11 +30,10 @@ class Yireo_EmailTester_EmailtesterController extends Yireo_EmailTester_Controll
     protected function _initAction()
     {
         $this->loadLayout()
-             ->_setActiveMenu('system/tools/emailtester')
-             ->_addBreadcrumb(Mage::helper('adminhtml')->__('System'), Mage::helper('adminhtml')->__('System'))
-             ->_addBreadcrumb(Mage::helper('adminhtml')->__('Tools'), Mage::helper('adminhtml')->__('Tools'))
-             ->_addBreadcrumb(Mage::helper('emailtester')->__('Email Tester'), Mage::helper('emailtester')->__('Email Tester'))
-        ;
+            ->_setActiveMenu('system/tools/emailtester')
+            ->_addBreadcrumb($this->adminhtmlHelper->__('System'), $this->adminhtmlHelper->__('System'))
+            ->_addBreadcrumb($this->adminhtmlHelper->__('Tools'), $this->adminhtmlHelper->__('Tools'))
+            ->_addBreadcrumb($this->__('Email Tester'), $this->__('Email Tester'));
         $this->prependTitle(array('EmailTester', 'System', 'Tools'));
         return $this;
     }
@@ -45,8 +44,8 @@ class Yireo_EmailTester_EmailtesterController extends Yireo_EmailTester_Controll
     public function indexAction()
     {
         $this->_initAction()
-             ->_addContent($this->getLayout()->createBlock('emailtester/form'))
-             ->renderLayout();
+            ->_addContent($this->getLayout()->createBlock('emailtester/form'))
+            ->renderLayout();
     }
 
     /**
@@ -110,17 +109,16 @@ class Yireo_EmailTester_EmailtesterController extends Yireo_EmailTester_Controll
      */
     protected function _gatherData()
     {
-        $this->template = $this->getPostValue('template');
-        $this->email = $this->getPostValue('email');
-        $this->storeId = (int) $this->getPostValue('store');
-        $this->customerId = (int) $this->getPostValue('customer_id');
-        $this->productId = (int) $this->getPostValue('product_id');
-        $this->orderId = (int) $this->getPostValue('order_id');
+        $this->setData('template', $this->getPostValue('template'));
+        $this->setData('email', $this->getPostValue('email'));
+        $this->setData('storeId', (int)$this->getPostValue('store'));
+        $this->setData('customerId', (int)$this->getPostValue('customer_id'));
+        $this->setData('productId', (int)$this->getPostValue('product_id'));
+        $this->setData('orderId', (int)$this->getPostValue('order_id'));
 
         if (Mage::app()->isSingleStoreMode()) {
             $this->storeId = Mage::app()->getStore(true)->getId();
         }
-
     }
 
     /**
@@ -130,28 +128,72 @@ class Yireo_EmailTester_EmailtesterController extends Yireo_EmailTester_Controll
      */
     protected function _preflightCheck()
     {
-        if (empty($this->template)) {
-            Mage::getModel('adminhtml/session')->addError($this->__('No transactional email specified'));
+        if ($this->isDataEmpty('template')) {
+            $this->getAdminhtmlSession()->addError($this->__('No transactional email specified'));
             return false;
         }
 
-        if ($this->storeId < 1) {
-            Mage::getModel('adminhtml/session')->addError($this->__('You need to specify a specific Store View'));
+        if ($this->isDataLowerThanOne('storeId')) {
+            $this->getAdminhtmlSession()->addError($this->__('You need to specify a specific Store View'));
             return false;
         }
 
-        if (empty($this->orderId)) {
-            Mage::getModel('adminhtml/session')->addError($this->__('You need to specify a sales order'));
+        if ($this->isDataEmpty('orderId')) {
+            $this->getAdminhtmlSession()->addError($this->__('You need to specify a sales order'));
             return false;
         }
 
+        $mailer = $this->mailer;
+        $mailer->setData('template', $this->getData('template'));
+        $mailer->setData('email', $this->getData('email'));
+        $mailer->setData('store_id', $this->getData('storeId'));
+        $mailer->setData('order_id', $this->getData('orderId'));
+        $mailer->setData('product_id', $this->getData('productId'));
+        $mailer->setData('customer_id', $this->getData('customerId'));
+        
         return true;
     }
 
+    /**
+     * Output the email in the browser
+     *
+     * @return void
+     */
+    protected function outputMail()
+    {
+        // Print the mail
+        $this->mailer->doPrint();
+    }
+
+    /**
+     * Send the email to a recipient
+     *
+     * @return bool
+     */
+    protected function sendMail()
+    {
+        // Send the mail
+        if ($this->mailer->send() == false) {
+            $error = $this->mailer->getErrorString();
+            $this->getAdminhtmlSession()->addError($this->__('Error sending mail: %s', $error));
+            return false;
+        }
+
+        $this->getAdminhtmlSession()->addSuccess($this->__('Mail sent to %s', $this->mailer->getEmail()));
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         $aclResource = 'admin/system/tools/emailtester';
 
-        return Mage::getSingleton('admin/session')->isAllowed($aclResource);
+        if (is_array($aclResource)) {
+            $aclResource = $aclResource[0];
+        }
+
+        return $this->getSession()->isAllowed($aclResource);
     }
 }

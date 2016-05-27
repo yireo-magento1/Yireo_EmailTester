@@ -1,4 +1,31 @@
-.form-list td.value select {
+/**
+ * EmailTester extension for Magento
+ *
+ * @package     Yireo_EmailTester
+ * @author      Yireo (https://www.yireo.com/)
+ * @copyright   Copyright (c) 2016 Yireo.com
+ * @license     Open Software License
+ */
+
+.emailtester-container .form-list td.value select {
     width: 350px;
     padding: 1px;
+}
+
+.emailtester-container .content-header td.left-col {
+    width: 80%;
+}
+
+.emailtester-container .content-header td.formbuttons {
+    float: right;
+}
+
+.emailtester-container .version {
+    text-align: center;
+}
+
+.emailtester-container .version .inner {
+    font-size: 90%;
+    color: #575757;
+    padding-top: 20px;
 }

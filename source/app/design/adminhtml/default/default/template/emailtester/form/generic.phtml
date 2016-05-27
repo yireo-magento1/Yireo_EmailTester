@@ -8,19 +8,23 @@
  * @license     Open Source License
  */
 
+/**
+ * @var $this Yireo_EmailTester_Block_Form_Generic
+ */
+$helper = $this->getHelper();
 ?>
 <div class="fieldset">
 <table cellspacing="0" class="form-list">
     <tbody>
         <tr class="headings">
-            <td class="label"><label for="email"><?php echo Mage::helper('emailtester')->__('Mail To')?></label>
+            <td class="label"><label for="email"><?php echo $helper->__('Mail To')?></label>
             </td>
             <td class="value">
                 <input type="text" name="email" id="email" value="<?php echo $this->getCurrentEmail(); ?>" class="input-text required-entry" />
             </td>
         </tr>
         <tr class="headings">
-            <td class="label"><label for="template"><?php echo Mage::helper('emailtester')->__('Transactional Email')?></label>
+            <td class="label"><label for="template"><?php echo $helper->__('Transactional Email')?></label>
             </td>
             <td class="value">
                 <select id="template" name="template" class="select required-entry">

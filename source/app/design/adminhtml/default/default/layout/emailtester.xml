@@ -1,18 +1,54 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * EmailTester extension for Magento
+ *
+ * @package     Yireo_EmailTester
+ * @author      Yireo (https://www.yireo.com/)
+ * @copyright   Copyright (c) 2016 Yireo.com
+ * @license     Open Software License
+ */
+-->
 <layout>
-    <adminhtml_emailtester_index>
-            
-        <block type="core/template" name="emailtester.head" template="emailtester/head/script.phtml" />
-
+    <emailtester_load_full>
+        <block type="core/template" name="emailtester.head" template="emailtester/head/script.phtml"/>
         <reference name="head">
-            <action method="addItem"><type>skin_css</type><name>css/emailtester/jquery-ui.min.css</name></action>
-            <action method="addItem"><type>skin_css</type><name>css/emailtester/jquery-ui.theme.css</name></action>
-            <action method="addItem"><type>skin_css</type><name>css/emailtester/jquery-ui.structure.min.css</name></action>
-            <action method="addItem" ifconfig="emailtester/settings/enable_jquery"><type>skin_js</type><name>js/emailtester/jquery.js</name></action>
-            <action method="addItem" ifconfig="emailtester/settings/enable_jquery"><type>skin_js</type><name>js/emailtester/jquery-noconflict.js</name></action>
-            <action method="addItem" ifconfig="emailtester/settings/enable_jqueryui"><type>skin_js</type><name>js/emailtester/jquery-ui.min.js</name></action>
-            <action method="addItem"><type>skin_js</type><name>js/emailtester/emailtester.js</name></action>
-            <action method="addItem"><type>skin_css</type><name>css/emailtester/emailtester.css</name></action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/emailtester/jquery-ui.min.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/emailtester/jquery-ui.theme.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/emailtester/jquery-ui.structure.min.css</name>
+            </action>
+            <action method="addItem" ifconfig="emailtester/settings/enable_jquery">
+                <type>skin_js</type>
+                <name>js/emailtester/jquery.js</name>
+            </action>
+            <action method="addItem" ifconfig="emailtester/settings/enable_jquery">
+                <type>skin_js</type>
+                <name>js/emailtester/jquery-noconflict.js</name>
+            </action>
+            <action method="addItem" ifconfig="emailtester/settings/enable_jqueryui">
+                <type>skin_js</type>
+                <name>js/emailtester/jquery-ui.min.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/emailtester/emailtester.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/emailtester/emailtester.css</name>
+            </action>
         </reference>
+    </emailtester_load_full>
+
+    <adminhtml_emailtester_index>
+        <update handle="emailtester_load_full"/>
     </adminhtml_emailtester_index>
 </layout>

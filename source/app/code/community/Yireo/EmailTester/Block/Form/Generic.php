@@ -1,16 +1,24 @@
 <?php
 /**
- * Yireo EmailTester for Magento 
+ * Yireo EmailTester for Magento
  *
  * @package     Yireo_EmailTester
- * @author      Yireo (http://www.yireo.com/)
- * @copyright   Copyright 2015 Yireo (http://www.yireo.com/)
+ * @author      Yireo (https://www.yireo.com/)
+ * @copyright   Copyright 2015 Yireo (https://www.yireo.com/)
  * @license     Open Source License
  * @contributor Philipp Wiegel
  */
 
-class Yireo_EmailTester_Block_Form_Generic extends Mage_Adminhtml_Block_Widget_Container
+/**
+ * Class Yireo_EmailTester_Block_Form_Generic
+ */
+class Yireo_EmailTester_Block_Form_Generic extends Yireo_EmailTester_Block_Form_Abstract
 {
+    /**
+     * @var Yireo_EmailTester_Model_Data_Template
+     */
+    protected $templateData;
+
     /**
      * Constructor method
      */
@@ -19,6 +27,8 @@ class Yireo_EmailTester_Block_Form_Generic extends Mage_Adminhtml_Block_Widget_C
         parent::_construct();
 
         $this->setTemplate('emailtester/form/generic.phtml');
+
+        $this->templateData = Mage::getModel('emailtester/data_template');
     }
 
     /**
@@ -28,32 +38,7 @@ class Yireo_EmailTester_Block_Form_Generic extends Mage_Adminhtml_Block_Widget_C
      */
     public function getTemplateOptions()
     {
-        $options = array();
-
-        $collection =  Mage::getResourceSingleton('core/email_template_collection')
-            ->setOrder('template_code')
-        ;
-
-        if(!empty($collection)) {
-            foreach($collection as $template) {
-                $templateCode = $template->getTemplateCode();
-                if(empty($templateCode)) $templateCode = $template->getData('orig_template_code');
-                $options[$templateCode]['value'] = $template->getTemplateId();
-                $options[$templateCode]['label'] = $templateCode;
-            }
-            ksort($options);
-        }
-
-        $defaultOptions = Mage::getModel('core/email_template')->getDefaultTemplatesAsOptionsArray();
-        foreach($defaultOptions as $option) {
-            if(empty($option['value'])) continue;
-            if(!empty($collection)) {
-                $option['label'] = '[default] '.$option['label'];
-            }
-            $options[] = $option;
-        }
-
-        return $options;
+        return $this->templateData->getTemplateOptions();
     }
 
     /**
@@ -63,10 +48,10 @@ class Yireo_EmailTester_Block_Form_Generic extends Mage_Adminhtml_Block_Widget_C
      */
     public function getCurrentTemplate()
     {
-        $userData = Mage::getSingleton('adminhtml/session')->getData();
+        $userData = $this->session->getData();
         $currentValue = (isset($userData['emailtester.template'])) ? (int)$userData['emailtester.template'] : null;
-        if(empty($currentValue)) {
-            $currentValue = Mage::getStoreConfig('emailtester/settings/default_transactional');
+        if (empty($currentValue)) {
+            $currentValue = $this->helper->getStoreConfig('emailtester/settings/default_transactional');
         }
         return $currentValue;
     }
@@ -78,9 +63,9 @@ class Yireo_EmailTester_Block_Form_Generic extends Mage_Adminhtml_Block_Widget_C
      */
     public function getCurrentEmail()
     {
-        $email = Mage::getSingleton('adminhtml/session')->getData('emailtester.email');
-        if(empty($email)) {
-            $email = Mage::helper('emailtester')->getDefaultEmail();
+        $email = $this->session->getData('emailtester.email');
+        if (empty($email)) {
+            $email = $this->helper->getDefaultEmail();
         }
         return $email;
     }

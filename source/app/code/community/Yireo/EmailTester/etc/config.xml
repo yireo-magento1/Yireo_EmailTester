@@ -4,8 +4,8 @@
  * Yireo EmailTester for Magento 
  *
  * @package     Yireo_EmailTester
- * @author      Yireo (http://www.yireo.com/)
- * @copyright   Copyright 2015 Yireo (http://www.yireo.com/)
+ * @author      Yireo (https://www.yireo.com/)
+ * @copyright   Copyright 2016 Yireo (https://www.yireo.com/)
  * @license     Open Source License (OSL v3)
  */
 -->
@@ -13,7 +13,7 @@
 
     <modules>
         <Yireo_EmailTester>
-            <version>1.0.30</version>
+            <version>1.2.0</version>
         </Yireo_EmailTester>
     </modules>
 
@@ -35,27 +35,6 @@
                 <class>Yireo_EmailTester_Model</class>
             </emailtester>
         </models>
-
-        <events>
-            <core_block_abstract_to_html_before>
-                <observers>
-                    <emailtester_add_html>
-                        <type>singleton</type>
-                        <class>Yireo_EmailTester_Model_Observer</class>
-                        <method>coreBlockAbstractToHtmlBefore</method>
-                    </emailtester_add_html>
-                </observers>
-            </core_block_abstract_to_html_before>
-            <controller_action_predispatch>
-                <observers>
-                    <emailtester_controller_action_predispatch>
-                        <type>singleton</type>
-                        <class>Yireo_EmailTester_Model_Observer</class>
-                        <method>controllerActionPredispatch</method>
-                    </emailtester_controller_action_predispatch>
-                </observers>
-            </controller_action_predispatch>
-        </events>
     </global>
 
     <adminhtml>
@@ -66,6 +45,7 @@
                 </emailtester>
             </updates>
         </layout>
+
         <translate>
             <modules>
                 <Yireo_EmailTester>
@@ -75,32 +55,37 @@
                 </Yireo_EmailTester>
             </modules>
         </translate>
-        <acl>
-            <resources>
-                <admin>
-                    <children>
-                        <system>
-                            <children>
-                                <tools>
-                                    <children>
-                                        <emailtester translate="title" module="emailtester">
-                                            <title>EmailTester GUI</title>
-                                        </emailtester>
-                                    </children>
-                                </tools>
-                                <config>
-                                    <children>
-                                        <emailtester translate="title" module="emailtester">
-                                            <title>EmailTester options</title>
-                                        </emailtester>
-                                    </children>
-                                </config>
-                            </children>
-                        </system>
-                    </children>
-                </admin>
-            </resources>
-        </acl>
+
+        <events>
+            <core_block_abstract_to_html_before>
+                <observers>
+                    <emailtester_add_js_block>
+                        <type>singleton</type>
+                        <class>Yireo_EmailTester_Observer_AddJsBlock</class>
+                        <method>coreBlockAbstractToHtmlBefore</method>
+                    </emailtester_add_js_block>
+                </observers>
+            </core_block_abstract_to_html_before>
+
+            <adminhtml_widget_container_html_before>
+                <observers>
+                    <emailtester_approvebutton>
+                        <class>Yireo_EmailTester_Observer_AddButtons</class>
+                        <method>adminhtmlWidgetContainerHtmlBefore</method>
+                    </emailtester_approvebutton>
+                </observers>
+            </adminhtml_widget_container_html_before>
+
+            <controller_action_predispatch>
+                <observers>
+                    <emailtester_add_feed>
+                        <type>singleton</type>
+                        <class>Yireo_EmailTester_Observer_Feed</class>
+                        <method>controllerActionPredispatch</method>
+                    </emailtester_add_feed>
+                </observers>
+            </controller_action_predispatch>
+        </events>
     </adminhtml>
 
     <admin>
@@ -125,6 +110,7 @@
                 <enable_jquery>1</enable_jquery>
                 <enable_jqueryui>1</enable_jqueryui>
                 <fix_header>0</fix_header>
+                <show_order_button>1</show_order_button>
             </settings>
         </emailtester>
     </default>

@@ -3,8 +3,8 @@
  * Yireo EmailTester for Magento 
  *
  * @package     Yireo_EmailTester
- * @author      Yireo (http://www.yireo.com/)
- * @copyright   Copyright 2015 Yireo (http://www.yireo.com/)
+ * @author      Yireo (https://www.yireo.com/)
+ * @copyright   Copyright 2015 Yireo (https://www.yireo.com/)
  * @license     Open Source License (OSL v3)
  */
 
@@ -13,6 +13,21 @@
  */
 class Yireo_EmailTester_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    /** @var Mage_Adminhtml_Model_Url */
+    protected $url;
+
+    /** @var Mage_Core_Model_App */
+    protected $app;
+    
+    /**
+     * Yireo_EmailTester_Helper_Data constructor.
+     */
+    public function __construct()
+    {
+        $this->app = Mage::app();
+        $this->url = Mage::getModel('adminhtml/url');
+    }
+    
     /**
      * Switch to determine whether this extension is enabled or not
      *
@@ -20,11 +35,19 @@ class Yireo_EmailTester_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function enabled()
     {
-        if ((bool)Mage::getStoreConfig('advanced/modules_disable_output/Yireo_EmailTester')) {
+        if ((bool)$this->getStoreConfig('advanced/modules_disable_output/Yireo_EmailTester')) {
             return false;
         }
 
-        return Mage::getStoreConfig('emailtester/settings/enabled');
+        return $this->getStoreConfig('emailtester/settings/enabled');
+    }
+
+    /**
+     * @return string
+     */
+    public function getTesterLink($orderId)
+    {
+        return $this->url->getUrl('adminhtml/emailtester/index', array('order_id' => $orderId, 'product_id' => 'X', 'customer_id' => 'X'));
     }
 
     /**
@@ -34,42 +57,16 @@ class Yireo_EmailTester_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getDefaultEmail()
     {
-        return Mage::getStoreConfig('emailtester/settings/default_email');
+        return $this->getStoreConfig('emailtester/settings/default_email');
     }
-
+    
     /**
-     * Output a string describing a customer record
+     * @param $value
      *
-     * @param Mage_Customer_Model_Customer $customer
-     *
-     * @return string
+     * @return null|string
      */
-    public function getCustomerOutput(Mage_Customer_Model_Customer $customer)
+    public function getStoreConfig($value)
     {
-        return $customer->getName() . ' ['.$customer->getData('email').']';
-    }
-
-    /**
-     * Output a string describing a product record
-     *
-     * @param Mage_Catalog_Model_Product $product
-     *
-     * @return string
-     */
-    public function getProductOutput(Mage_Catalog_Model_Product $product)
-    {
-        return $product->getName() . ' ['.$product->getSku().']';
-    }
-
-    /**
-     * Output a string describing a customer record
-     *
-     * @param Mage_Sales_Model_Order $order
-     *
-     * @return string
-     */
-    public function getOrderOutput(Mage_Sales_Model_Order $order)
-    {
-        return '#'.$order->getIncrementId() . ' ['.$order->getCustomerEmail().' / '.$order->getState().']';
+        return $this->app->getStore()->getConfig($value);
     }
 }
