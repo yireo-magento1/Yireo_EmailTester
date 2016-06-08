@@ -31,7 +31,7 @@ class Yireo_EmailTester_Block_Form_Order extends Yireo_EmailTester_Block_Form_Ab
         $this->orderData = Mage::getModel('emailtester/data_order');
     }
     
-    public function getHelper()
+    public function getDataHelper()
     {
         return $this->helper;
     }

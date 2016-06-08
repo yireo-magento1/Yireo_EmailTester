@@ -45,7 +45,7 @@ class Yireo_EmailTester_Block_Form_Abstract extends Mage_Adminhtml_Block_Widget_
     /**
      * @return Yireo_EmailTester_Helper_Data
      */
-    public function getHelper()
+    public function getDataHelper()
     {
         return $this->helper;
     }

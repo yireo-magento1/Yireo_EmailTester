@@ -13,10 +13,14 @@
  */
 class Yireo_EmailTester_Helper_Data extends Mage_Core_Helper_Abstract
 {
-    /** @var Mage_Adminhtml_Model_Url */
+    /**
+     * @var Mage_Adminhtml_Model_Url
+     */
     protected $url;
 
-    /** @var Mage_Core_Model_App */
+    /**
+     * @var Mage_Core_Model_App
+     */
     protected $app;
     
     /**
