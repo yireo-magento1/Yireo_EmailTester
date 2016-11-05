@@ -173,9 +173,15 @@ class Yireo_EmailTester_EmailtesterController extends Yireo_EmailTester_Controll
     protected function sendMail()
     {
         // Send the mail
-        if ($this->mailer->send() == false) {
+        if ($this->mailer->send() === false) {
             $error = $this->mailer->getErrorString();
-            $this->getAdminhtmlSession()->addError($this->__('Error sending mail: %s', $error));
+
+            if (!empty($error)) {
+                $this->getAdminhtmlSession()->addError($this->__('Error sending mail: %s', $error));
+            } else {
+                $this->getAdminhtmlSession()->addError($this->__('Unknown error sending mail'));
+            }
+
             return false;
         }
 

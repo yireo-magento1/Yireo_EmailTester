@@ -22,4 +22,12 @@ class Yireo_EmailTester_Block_Print extends Mage_Adminhtml_Block_Widget_Containe
 
         $this->setTemplate('emailtester/print.phtml');
     }
+
+    /**
+     * @param $bodyId
+     */
+    public function setBody($bodyId)
+    {
+        $this->setData('body_id', $bodyId);
+    }
 }

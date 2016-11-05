@@ -57,7 +57,9 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
         $fixHeader = (bool)Mage::getStoreConfig('emailtester/settings/fix_header');
 
         if (strstr($body, '<html') == false && $fixHeader == true) {
-            echo Mage::app()->getLayout()->createBlock('emailtester/print')->setBody($body)->toHtml();
+            /** @var Yireo_EmailTester_Block_Print $block */
+            $block = Mage::app()->getLayout()->createBlock('emailtester/print');
+            echo $block->setBody($body)->toHtml();
         } else {
             echo $body;
         }
@@ -89,7 +91,7 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
         $translate = Mage::getSingleton('core/translate');
         $translate->setTranslateInline(false);
 
-        $sender = Mage::getSingleton('emailtester/mailer_addressee');
+        $sender = Mage::getModel('emailtester/mailer_addressee');
         $recipient = $this->getRecipient();
 
         $variables = $this->collectVariables();
@@ -112,6 +114,7 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
 
         } catch (Exception $e) {
             $sent = false;
+            Mage::logException($e);
             $this->addError($e->getMessage());
         }
 
@@ -134,16 +137,15 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
             $this->addError('SMTP is disabled');
         }
 
-        if ($mailer->getSenderName() == false) {
+        $sender = Mage::getModel('emailtester/mailer_addressee');
+        $senderArray = $sender->getAsArray();
+
+        if (empty($senderArray['name'])) {
             $this->addError('Sender name is missing');
         }
 
-        if ($mailer->getSenderEmail() == false) {
+        if (empty($senderArray['email'])) {
             $this->addError('Sender email is missing');
-        }
-
-        if ($mailer->getTemplateSubject() == false) {
-            $this->addError('Template subject is missing');
         }
 
         if (!$this->hasErrors()) {
@@ -156,8 +158,9 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
      */
     protected function getRecipient()
     {
-        $recipient = Mage::getSingleton('emailtester/mailer_addressee');
+        $recipient = Mage::getModel('emailtester/mailer_addressee');
 
+        /** @var Mage_Customer_Model_Customer $customer */
         $customer = Mage::getModel('customer/customer')->load($this->getCustomerId());
         if ($customer->getId() > 0) {
             $recipient->setName($customer->getName());
@@ -189,7 +192,7 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
     /**
      * Get the email template object
      *
-     * @return Mage_Core_Model_Email_Template
+     * @return Mage_Core_Model_Email_Template_Mailer
      */
     protected function getMailer()
     {
@@ -275,5 +278,21 @@ class Yireo_EmailTester_Model_Mailer extends Mage_Core_Model_Abstract
     protected function setTemplate($template)
     {
         $this->setData('template', $template);
+    }
+
+    /**
+     * @return int
+     */
+    public function getCustomerId()
+    {
+        return $this->getData('customerId');
+    }
+
+    /**
+     * @param int $customerId
+     */
+    public function setCustomerId($customerId)
+    {
+        $this->setData('customerId', $customerId);
     }
 }

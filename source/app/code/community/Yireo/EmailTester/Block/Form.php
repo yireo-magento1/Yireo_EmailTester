@@ -106,29 +106,45 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
 
         $accordion->addItem('generic', array(
             'title' => $this->helper->__('Generic'),
-            'content' => $this->getLayout()->createBlock('emailtester/form_generic')->toHtml(),
+            'content' => $this->getBlockContent('emailtester/form_generic'),
             'open' => true,
         ));
 
         $accordion->addItem('customer', array(
             'title' => $this->helper->__('Customer'),
-            'content' => $this->getLayout()->createBlock('emailtester/form_customer')->toHtml(),
+            'content' => $this->getBlockContent('emailtester/form_customer'),
             'open' => true,
         ));
 
         $accordion->addItem('product', array(
             'title' => $this->helper->__('Product'),
-            'content' => $this->getLayout()->createBlock('emailtester/form_product')->toHtml(),
+            'content' => $this->getBlockContent('emailtester/form_product'),
             'open' => true,
         ));
 
         $accordion->addItem('order', array(
             'title' => $this->helper->__('Order'),
-            'content' => $this->getLayout()->createBlock('emailtester/form_order')->toHtml(),
+            'content' => $this->getBlockContent('emailtester/form_order'),
             'open' => true,
         ));
         
         return $accordion;
+    }
+
+    /**
+     * @param $blockName
+     *
+     * @return string
+     */
+    protected function getBlockContent($blockName)
+    {
+        $block = $this->getLayout()->createBlock($blockName);
+
+        if ($block === false) {
+            return '';
+        }
+
+        return $block->toHtml();
     }
 
     /**
@@ -144,12 +160,14 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
      */
     protected function getOutputButtonBlock()
     {
-        return $this->getLayout()->createBlock('adminhtml/widget_button')
-            ->setData(array(
-                'label' => $this->helper->__('Print Email'),
-                'onclick' => 'emailtesterPrint()',
-                'class' => 'save',
-            ));
+        $block = $this->getLayout()->createBlock('adminhtml/widget_button');
+        $block->setData(array(
+            'label' => $this->helper->__('Print Email'),
+            'onclick' => 'emailtesterPrint()',
+            'class' => 'save',
+        ));
+
+        return $block;
     }
 
     /**
@@ -157,12 +175,14 @@ class Yireo_EmailTester_Block_Form extends Mage_Adminhtml_Block_Widget_Container
      */
     protected function getSendButtonBlock()
     {
-        return $this->getLayout()->createBlock('adminhtml/widget_button')
-            ->setData(array(
-                'label' => $this->helper->__('Send Email'),
-                'onclick' => 'emailtesterEmail()',
-                'class' => 'save',
-            ));
+        $block = $this->getLayout()->createBlock('adminhtml/widget_button');
+        $block->setData(array(
+            'label' => $this->helper->__('Send Email'),
+            'onclick' => 'emailtesterEmail()',
+            'class' => 'save',
+        ));
+
+        return $block;
     }
 
     /**
