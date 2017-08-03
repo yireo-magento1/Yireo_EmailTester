@@ -64,8 +64,10 @@ class Yireo_EmailTester_EmailtesterController extends Yireo_EmailTester_Controll
             $data = $this->getProductData($term);
         }
 
-        echo json_encode($data);
-        exit;
+        $jsonData = Mage::helper('core')->jsonEncode($data);
+
+        $this->getResponse()->setHeader('Content-type', 'application/json');
+        $this->getResponse()->setBody($jsonData);
     }
 
     /**
