@@ -34,6 +34,7 @@ class Yireo_EmailTester_EmailtesterController extends Yireo_EmailTester_Controll
             ->_addBreadcrumb($this->adminhtmlHelper->__('System'), $this->adminhtmlHelper->__('System'))
             ->_addBreadcrumb($this->adminhtmlHelper->__('Tools'), $this->adminhtmlHelper->__('Tools'))
             ->_addBreadcrumb($this->__('Email Tester'), $this->__('Email Tester'));
+
         $this->prependTitle(array('EmailTester', 'System', 'Tools'));
         return $this;
     }
