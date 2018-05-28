@@ -76,6 +76,7 @@ class Yireo_EmailTester_EmailtesterController extends Yireo_EmailTester_Controll
      */
     public function outputAction()
     {
+        ini_set('display_errors', 1);
         $this->_gatherData();
 
         if ($this->_preflightCheck() == false) {

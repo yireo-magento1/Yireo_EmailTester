@@ -26,8 +26,9 @@ class Yireo_EmailTester_Block_Print extends Mage_Adminhtml_Block_Widget_Containe
     /**
      * @param $bodyId
      */
-    public function setBody($bodyId)
+    public function setBody($body)
     {
-        $this->setData('body_id', $bodyId);
+        $this->setData('body', $body);
+        return $this;
     }
 }
